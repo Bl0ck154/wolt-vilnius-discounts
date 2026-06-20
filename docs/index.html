@@ -32,42 +32,61 @@
       </section>
 
       <section class="controls" aria-label="Table controls">
-        <label class="search">
-          <span>Search</span>
-          <input id="searchInput" type="search" placeholder="Venue, offer, slug..." />
-        </label>
+        <div class="controls-row">
+          <label class="search">
+            <span>Search</span>
+            <input id="searchInput" type="search" placeholder="Venue, offer, slug, address..." />
+          </label>
 
-        <label>
-          <span>Type</span>
-          <select id="productFilter"></select>
-        </label>
+          <label>
+            <span>Type</span>
+            <select id="productFilter"></select>
+          </label>
 
-        <label>
-          <span>Sort</span>
-          <select id="sortSelect">
-            <option value="amount-desc">Best discount</option>
-            <option value="name-asc">Name A-Z</option>
-            <option value="type-asc">Type</option>
-            <option value="delivery-asc">Delivery price</option>
-          </select>
-        </label>
+          <label>
+            <span>Sort</span>
+            <select id="sortSelect">
+              <option value="best-desc">Best discount</option>
+              <option value="best-asc">Worst discount</option>
+              <option value="name-asc">Name A-Z</option>
+              <option value="name-desc">Name Z-A</option>
+              <option value="type-asc">Type</option>
+              <option value="type-desc">Type desc</option>
+              <option value="hours-asc">Open first</option>
+              <option value="hours-desc">Closed first</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="toggle-row" aria-label="Offer visibility">
+          <label class="toggle">
+            <input id="hideNewUserDelivery" type="checkbox" checked />
+            <span>Hide “0€ delivery for new users”</span>
+          </label>
+          <label class="toggle">
+            <input id="hideDeliveryDiscounts" type="checkbox" checked />
+            <span>Hide delivery discounts</span>
+          </label>
+          <span class="shown-count" id="shownCount">-</span>
+        </div>
       </section>
 
       <section class="table-wrap" aria-label="Venues">
         <table>
           <thead>
             <tr>
-              <th>Venue</th>
-              <th>Type</th>
+              <th class="num-col"><button class="sort-header" data-sort-key="rank">#</button></th>
+              <th><button class="sort-header" data-sort-key="name">Venue</button></th>
+              <th><button class="sort-header" data-sort-key="type">Type</button></th>
               <th>Offer</th>
-              <th>Best</th>
-              <th>Delivery</th>
-              <th>ETA</th>
+              <th><button class="sort-header" data-sort-key="best">Best</button></th>
+              <th><button class="sort-header" data-sort-key="hours">Hours</button></th>
+              <th>Map</th>
             </tr>
           </thead>
           <tbody id="venueRows">
             <tr>
-              <td colspan="6" class="empty">Loading...</td>
+              <td colspan="7" class="empty">Loading...</td>
             </tr>
           </tbody>
         </table>

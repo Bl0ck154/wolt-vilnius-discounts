@@ -23,13 +23,18 @@ export function normalizeSnapshot({ urls, restaurantRows, promoRows }) {
 function normalizeVenueRow(row, sourceEndpoint) {
   const venue = row.venue;
   const offers = extractOffers(venue);
+  const best = bestDiscount(offers);
+  const coordinates = extractCoordinates(venue) ?? extractCoordinates(row.item);
+  const opening = extractOpening(venue);
 
   return {
     id: venue.id ?? null,
     slug: venue.slug ?? null,
     name: venue.name ?? "",
     productLine: venue.product_line ?? null,
-    address: venue.address ?? null,
+    address: formatAddress(venue.address),
+    coordinates,
+    mapUrl: buildMapUrl(venue, coordinates),
     link: row.item?.link?.target ?? buildWoltLink(venue),
     imageUrl: venue.image?.url ?? venue.brand_image?.url ?? row.item?.image?.url ?? null,
     brandImageUrl: venue.brand_image?.url ?? null,
@@ -37,14 +42,18 @@ function normalizeVenueRow(row, sourceEndpoint) {
     deliveryPrice: venue.delivery_price ?? null,
     deliveryPriceInt: venue.delivery_price_int ?? null,
     estimateRange: venue.estimate_range ?? venue.estimate_box?.title ?? null,
+    opening,
+    isOpen: opening.isOpen,
+    openingStatus: opening.label,
+    openingHours: opening.hours,
     section: {
       name: row.sectionName,
       template: row.sectionTemplate,
     },
     offers,
-    bestDiscount: bestDiscount(offers),
-    bestAmount: bestDiscount(offers)?.amount ?? null,
-    bestLabel: bestDiscount(offers)?.label ?? null,
+    bestDiscount: best,
+    bestAmount: best?.amount ?? null,
+    bestLabel: best?.label ?? null,
     offerTexts: [...new Set(offers.map((offer) => offer.text).filter(Boolean))],
     sourceEndpoint,
     raw: {
@@ -87,6 +96,8 @@ function normalizeOffer(sourcePath, raw) {
     amount: discount?.amount ?? null,
     amountType: discount?.type ?? null,
     amountLabel: discount?.label ?? null,
+    category: classifyOffer(text),
+    isDeliveryRelated: isDeliveryRelated(text),
     variant: raw.variant ?? raw.type ?? null,
     raw,
   };
@@ -136,6 +147,7 @@ export function extractDiscount(text = "") {
 
 function bestDiscount(offers) {
   const discounts = offers
+    .filter((offer) => !offer.isDeliveryRelated)
     .filter((offer) => Number.isFinite(offer.amount))
     .sort((a, b) => discountScore(b) - discountScore(a));
 
@@ -150,6 +162,133 @@ function bestDiscount(offers) {
     label: best.amountLabel,
     sourceText: best.text,
   };
+}
+
+function classifyOffer(text) {
+  const normalized = normalizeText(text).toLowerCase();
+  if (isNewUserZeroDelivery(normalized)) {
+    return "new-user-delivery";
+  }
+  if (isDeliveryRelated(normalized)) {
+    return "delivery";
+  }
+  if (/%/.test(normalized)) {
+    return "percent";
+  }
+  if (/€|eur|euro/.test(normalized)) {
+    return "money";
+  }
+  if (/free|deal|discount|off|save|nuolaid/i.test(normalized)) {
+    return "deal";
+  }
+  return "other";
+}
+
+function isNewUserZeroDelivery(text) {
+  return /(?:0\s*€|€\s*0|0\s*(?:eur|euro))/.test(text) && /delivery/.test(text) && /new users?/.test(text);
+}
+
+function isDeliveryRelated(text) {
+  return /delivery/i.test(normalizeText(text));
+}
+
+function formatAddress(address) {
+  if (!address) {
+    return null;
+  }
+  if (typeof address === "string") {
+    return address;
+  }
+  return [address.street_address, address.formatted_address, address.address, address.city]
+    .filter(Boolean)
+    .join(", ") || null;
+}
+
+function extractCoordinates(source) {
+  const candidates = [
+    source?.location,
+    source?.coordinates,
+    source?.address?.location,
+    source?.venue?.location,
+  ];
+
+  for (const candidate of candidates) {
+    const coordinates = normalizeCoordinates(candidate);
+    if (coordinates) {
+      return coordinates;
+    }
+  }
+
+  return normalizeCoordinates(source);
+}
+
+function normalizeCoordinates(value) {
+  if (!value) {
+    return null;
+  }
+
+  if (Array.isArray(value) && value.length >= 2) {
+    return finiteCoordinates(value[1], value[0]);
+  }
+
+  if (Array.isArray(value.coordinates) && value.coordinates.length >= 2) {
+    return finiteCoordinates(value.coordinates[1], value.coordinates[0]);
+  }
+
+  return finiteCoordinates(
+    value.lat ?? value.latitude,
+    value.lon ?? value.lng ?? value.longitude,
+  );
+}
+
+function finiteCoordinates(lat, lon) {
+  const numericLat = Number(lat);
+  const numericLon = Number(lon);
+  if (Number.isFinite(numericLat) && Number.isFinite(numericLon)) {
+    return { lat: numericLat, lon: numericLon };
+  }
+  return null;
+}
+
+function buildMapUrl(venue, coordinates) {
+  if (coordinates) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${coordinates.lat},${coordinates.lon}`)}`;
+  }
+
+  const query = [venue.name, formatAddress(venue.address), "Vilnius"].filter(Boolean).join(" ");
+  return query ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}` : null;
+}
+
+function extractOpening(venue) {
+  const rawStatus = [
+    venue.online_status,
+    venue.opening_status,
+    venue.status,
+    venue.status_label,
+    venue.estimate_box?.subtitle,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const lowerStatus = rawStatus.toLowerCase();
+
+  let isOpen = null;
+  if (venue.is_open === true || venue.online === true || venue.is_online === true) {
+    isOpen = true;
+  }
+  if (venue.is_open === false || venue.online === false || venue.is_online === false) {
+    isOpen = false;
+  }
+  if (/open|available|accepting/i.test(lowerStatus)) {
+    isOpen = true;
+  }
+  if (/closed|offline|unavailable|not accepting/i.test(lowerStatus)) {
+    isOpen = false;
+  }
+
+  const hours = venue.opening_hours?.text ?? venue.opening_times?.text ?? venue.opening_time ?? null;
+  const label = rawStatus || (isOpen === true ? "Open" : isOpen === false ? "Closed" : hours ?? "Unknown");
+
+  return { isOpen, label, hours };
 }
 
 function discountScore(offer) {

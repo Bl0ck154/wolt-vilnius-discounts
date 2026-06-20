@@ -30,8 +30,9 @@ export function diffSnapshots(previous, current) {
 
 export function isInterestingOffer(offer) {
   const text = offer.text.toLowerCase();
+  const isDelivery = /delivery/.test(text);
 
-  if (!NOTIFY_RULES.includeZeroDelivery && /delivery/.test(text) && offer.amount === 0) {
+  if (!NOTIFY_RULES.includeZeroDelivery && isDelivery) {
     return false;
   }
 
@@ -47,7 +48,7 @@ export function isInterestingOffer(offer) {
     return true;
   }
 
-  return /%|off|discount|deal|save|nuolaid/i.test(offer.text) && !/delivery/.test(text);
+  return /%|off|discount|deal|save|nuolaid/i.test(offer.text) && !isDelivery;
 }
 
 function offerIndex(snapshot) {

@@ -1,6 +1,8 @@
 const state = {
   snapshot: null,
   rows: [],
+  sortKey: "best",
+  sortDir: "desc",
 };
 
 const elements = {
@@ -10,11 +12,15 @@ const elements = {
   searchInput: document.querySelector("#searchInput"),
   productFilter: document.querySelector("#productFilter"),
   sortSelect: document.querySelector("#sortSelect"),
+  hideNewUserDelivery: document.querySelector("#hideNewUserDelivery"),
+  hideDeliveryDiscounts: document.querySelector("#hideDeliveryDiscounts"),
+  shownCount: document.querySelector("#shownCount"),
   venueRows: document.querySelector("#venueRows"),
+  sortHeaders: document.querySelectorAll(".sort-header"),
 };
 
 init().catch((error) => {
-  elements.venueRows.innerHTML = `<tr><td colspan="6" class="empty">${escapeHtml(error.message)}</td></tr>`;
+  elements.venueRows.innerHTML = `<tr><td colspan="7" class="empty">${escapeHtml(error.message)}</td></tr>`;
 });
 
 async function init() {
@@ -48,38 +54,57 @@ function hydrateFilters() {
 function bindControls() {
   elements.searchInput.addEventListener("input", renderRows);
   elements.productFilter.addEventListener("change", renderRows);
-  elements.sortSelect.addEventListener("change", renderRows);
+  elements.hideNewUserDelivery.addEventListener("change", renderRows);
+  elements.hideDeliveryDiscounts.addEventListener("change", renderRows);
+  elements.sortSelect.addEventListener("change", () => {
+    setSortFromSelect(elements.sortSelect.value);
+    renderRows();
+  });
+  elements.sortHeaders.forEach((header) => {
+    header.addEventListener("click", () => {
+      setSortFromHeader(header.dataset.sortKey);
+      renderRows();
+    });
+  });
 }
 
 function renderRows() {
   const query = elements.searchInput.value.trim().toLowerCase();
   const productLine = elements.productFilter.value;
-  const sort = elements.sortSelect.value;
 
   const rows = state.rows
-    .filter((venue) => !productLine || venue.productLine === productLine)
-    .filter((venue) => matchesQuery(venue, query))
-    .sort(sorter(sort))
+    .map((venue) => ({ venue, visibleOffers: visibleOffers(venue) }))
+    .filter(({ venue }) => !productLine || venue.productLine === productLine)
+    .filter(({ venue }) => matchesQuery(venue, query))
+    .filter(({ visibleOffers }) => visibleOffers.length > 0)
+    .sort(sorter())
     .slice(0, 1000);
 
+  elements.shownCount.textContent = `${formatNumber(rows.length)} shown / ${formatNumber(state.rows.length)} total`;
+  syncSortUi();
+
   if (!rows.length) {
-    elements.venueRows.innerHTML = `<tr><td colspan="6" class="empty">No matching venues</td></tr>`;
+    elements.venueRows.innerHTML = `<tr><td colspan="7" class="empty">No matching venues</td></tr>`;
     return;
   }
 
-  elements.venueRows.innerHTML = rows.map(renderVenueRow).join("");
+  elements.venueRows.innerHTML = rows.map((row, index) => renderVenueRow(row.venue, row.visibleOffers, index + 1)).join("");
 }
 
-function renderVenueRow(venue) {
+function renderVenueRow(venue, visibleOffers, index) {
   const image = venue.imageUrl
     ? `<img class="venue-image" src="${escapeHtml(venue.imageUrl)}" alt="" loading="lazy" />`
     : `<div class="venue-image" aria-hidden="true"></div>`;
-  const offers = venue.offerTexts.length
-    ? venue.offerTexts.map((text) => `<span class="offer">${escapeHtml(text)}</span>`).join("")
+  const offers = visibleOffers.length
+    ? visibleOffers.map((offer) => `<span class="offer ${offerClass(offer)}">${escapeHtml(offer.text)}</span>`).join("")
     : `<span class="venue-meta">No text</span>`;
+  const best = bestDiscount(venue);
+  const mapUrl = mapLink(venue);
+  const hours = openingLabel(venue);
 
   return `
     <tr>
+      <td class="num-col row-num">${index}</td>
       <td>
         <div class="venue-cell">
           ${image}
@@ -87,17 +112,52 @@ function renderVenueRow(venue) {
             <a class="venue-title" href="${escapeHtml(venue.link ?? "#")}" target="_blank" rel="noreferrer">
               ${escapeHtml(venue.name)}
             </a>
-            <div class="venue-meta">${escapeHtml(venue.slug ?? "")}</div>
+            <div class="venue-meta">${escapeHtml([venue.address, venue.slug].filter(Boolean).join(" · "))}</div>
           </div>
         </div>
       </td>
       <td><span class="pill">${escapeHtml(label(venue.productLine ?? "unknown"))}</span></td>
       <td><div class="offer-list">${offers}</div></td>
-      <td class="amount">${escapeHtml(venue.bestLabel ?? "-")}</td>
-      <td>${escapeHtml(venue.deliveryPrice ?? "-")}</td>
-      <td>${escapeHtml(venue.estimateRange ?? "-")}</td>
+      <td class="amount">${escapeHtml(best?.label ?? "-")}</td>
+      <td><span class="hours ${hours.className}">${escapeHtml(hours.icon)} ${escapeHtml(hours.text)}</span></td>
+      <td>${mapUrl ? `<a class="map-link" href="${escapeHtml(mapUrl)}" target="_blank" rel="noreferrer" title="Open in Google Maps">🗺️</a>` : "-"}</td>
     </tr>
   `;
+}
+
+function visibleOffers(venue) {
+  const seen = new Set();
+  const offers = sourceOffers(venue).filter((offer) => {
+    const key = normalizeOfferText(offer.text).toLowerCase();
+    if (!key || seen.has(key)) {
+      return false;
+    }
+    seen.add(key);
+
+    if (elements.hideNewUserDelivery.checked && isNewUserZeroDelivery(offer.text)) {
+      return false;
+    }
+    if (elements.hideDeliveryDiscounts.checked && isDeliveryDiscount(offer.text)) {
+      return false;
+    }
+    return true;
+  });
+
+  return offers;
+}
+
+function sourceOffers(venue) {
+  if (Array.isArray(venue.offers) && venue.offers.length) {
+    return venue.offers.map((offer) => ({
+      text: normalizeOfferText(offer.text),
+      amount: offer.amount,
+      amountType: offer.amountType,
+      amountLabel: offer.amountLabel,
+      sourcePath: offer.sourcePath,
+    }));
+  }
+
+  return (venue.offerTexts ?? []).map((text) => ({ text: normalizeOfferText(text) }));
 }
 
 function matchesQuery(venue, query) {
@@ -105,35 +165,208 @@ function matchesQuery(venue, query) {
     return true;
   }
 
-  return [venue.name, venue.slug, venue.productLine, ...(venue.offerTexts ?? [])]
+  return [venue.name, venue.slug, venue.productLine, venue.address, ...(venue.offerTexts ?? [])]
     .filter(Boolean)
     .join(" ")
     .toLowerCase()
     .includes(query);
 }
 
-function sorter(sort) {
-  if (sort === "name-asc") {
-    return (a, b) => a.name.localeCompare(b.name);
+function sorter() {
+  const dir = state.sortDir === "asc" ? 1 : -1;
+
+  if (state.sortKey === "rank") {
+    return () => 0;
   }
-  if (sort === "type-asc") {
+  if (state.sortKey === "name") {
+    return (a, b) => dir * a.venue.name.localeCompare(b.venue.name);
+  }
+  if (state.sortKey === "type") {
     return (a, b) =>
-      String(a.productLine).localeCompare(String(b.productLine)) || a.name.localeCompare(b.name);
+      dir * (String(a.venue.productLine).localeCompare(String(b.venue.productLine)) || a.venue.name.localeCompare(b.venue.name));
   }
-  if (sort === "delivery-asc") {
-    return (a, b) =>
-      (a.deliveryPriceInt ?? Number.MAX_SAFE_INTEGER) -
-        (b.deliveryPriceInt ?? Number.MAX_SAFE_INTEGER) || a.name.localeCompare(b.name);
+  if (state.sortKey === "hours") {
+    return (a, b) => dir * (openScore(a.venue) - openScore(b.venue)) || a.venue.name.localeCompare(b.venue.name);
   }
-  return (a, b) => bestSortValue(b) - bestSortValue(a) || a.name.localeCompare(b.name);
+  return (a, b) => dir * (bestSortValue(a.venue) - bestSortValue(b.venue)) || a.venue.name.localeCompare(b.venue.name);
 }
 
 function bestSortValue(venue) {
-  if (!venue.bestDiscount) {
-    return -1;
+  return bestDiscount(venue)?.score ?? -1;
+}
+
+function bestDiscount(venue) {
+  const discounts = sourceOffers(venue)
+    .filter((offer) => !isDeliveryRelated(offer.text))
+    .map((offer) => ({ ...offer, discount: offerDiscount(offer) }))
+    .filter((offer) => Number.isFinite(offer.discount?.amount))
+    .sort((a, b) => discountScore(b.discount) - discountScore(a.discount));
+
+  if (!discounts.length) {
+    return null;
   }
 
-  return venue.bestDiscount.amount ?? -1;
+  const best = discounts[0];
+  return {
+    label: best.discount.label,
+    score: discountScore(best.discount),
+  };
+}
+
+function offerDiscount(offer) {
+  if (Number.isFinite(offer.amount)) {
+    return {
+      amount: offer.amount,
+      type: offer.amountType,
+      label: offer.amountLabel ?? formatDiscountLabel(offer.amount, offer.amountType),
+    };
+  }
+
+  return extractDiscount(offer.text);
+}
+
+function extractDiscount(text = "") {
+  const normalized = normalizeOfferText(text);
+  const percent = normalized.match(/(-?\d+(?:[.,]\d+)?)\s*%/);
+  if (percent) {
+    const amount = Math.abs(Number(percent[1].replace(",", ".")));
+    return { amount, type: "percent", label: `${amount}%` };
+  }
+
+  const money = normalized.match(/(?:€\s*(\d+(?:[.,]\d+)?)|(\d+(?:[.,]\d+)?)\s*(?:€|eur|euro))/i);
+  if (money) {
+    const amount = Number((money[1] ?? money[2]).replace(",", "."));
+    return { amount, type: "money", label: `${amount} EUR` };
+  }
+
+  return null;
+}
+
+function discountScore(discount) {
+  if (discount.type === "percent") {
+    return discount.amount;
+  }
+  if (discount.type === "money") {
+    return discount.amount;
+  }
+  return -1;
+}
+
+function formatDiscountLabel(amount, type) {
+  if (type === "percent") {
+    return `${amount}%`;
+  }
+  if (type === "money") {
+    return `${amount} EUR`;
+  }
+  return String(amount);
+}
+
+function offerClass(offer) {
+  const text = offer.text.toLowerCase();
+  if (isNewUserZeroDelivery(text)) {
+    return "offer-new-user";
+  }
+  if (isDeliveryDiscount(text)) {
+    return "offer-delivery";
+  }
+  if (/%/.test(text)) {
+    return "offer-percent";
+  }
+  if (/€|eur|euro/.test(text)) {
+    return "offer-money";
+  }
+  if (/free|0\s*€|0eur|0 eur/i.test(text)) {
+    return "offer-free";
+  }
+  return "offer-other";
+}
+
+function isNewUserZeroDelivery(text = "") {
+  const normalized = normalizeOfferText(text).toLowerCase();
+  return /(?:0\s*€|€\s*0|0\s*(?:eur|euro))/.test(normalized) && /delivery/.test(normalized) && /new users?/.test(normalized);
+}
+
+function isDeliveryDiscount(text = "") {
+  const normalized = normalizeOfferText(text).toLowerCase();
+  return !isNewUserZeroDelivery(normalized) && /delivery/.test(normalized) && (/\boff\b|discount|save|fee|free|€|eur|euro/.test(normalized));
+}
+
+function isDeliveryRelated(text = "") {
+  return /delivery/i.test(normalizeOfferText(text));
+}
+
+function openingLabel(venue) {
+  const opening = venue.opening ?? {};
+  if (opening.isOpen === true || venue.isOpen === true) {
+    return { icon: "🟢", text: opening.label ?? venue.openingStatus ?? "Open", className: "hours-open" };
+  }
+  if (opening.isOpen === false || venue.isOpen === false) {
+    return { icon: "🔴", text: opening.label ?? venue.openingStatus ?? "Closed", className: "hours-closed" };
+  }
+  return { icon: "⚪", text: opening.label ?? venue.openingStatus ?? venue.openingHours ?? "Unknown", className: "hours-unknown" };
+}
+
+function openScore(venue) {
+  const opening = venue.opening ?? {};
+  if (opening.isOpen === true || venue.isOpen === true) {
+    return 0;
+  }
+  if (opening.isOpen === false || venue.isOpen === false) {
+    return 2;
+  }
+  return 1;
+}
+
+function mapLink(venue) {
+  if (venue.mapUrl) {
+    return venue.mapUrl;
+  }
+  const lat = venue.coordinates?.lat ?? venue.location?.lat;
+  const lon = venue.coordinates?.lon ?? venue.location?.lon;
+  if (Number.isFinite(lat) && Number.isFinite(lon)) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${lat},${lon}`)}`;
+  }
+  if (venue.address || venue.name) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([venue.name, venue.address, "Vilnius"].filter(Boolean).join(" "))}`;
+  }
+  return null;
+}
+
+function setSortFromSelect(value) {
+  const [key, dir] = value.split("-");
+  state.sortKey = key === "amount" ? "best" : key;
+  state.sortDir = dir === "asc" ? "asc" : "desc";
+}
+
+function setSortFromHeader(key) {
+  if (!key) {
+    return;
+  }
+  if (state.sortKey === key) {
+    state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+  } else {
+    state.sortKey = key;
+    state.sortDir = key === "best" ? "desc" : "asc";
+  }
+}
+
+function syncSortUi() {
+  const selectKey = state.sortKey === "best" ? "best" : state.sortKey;
+  const selectValue = `${selectKey}-${state.sortDir}`;
+  if ([...elements.sortSelect.options].some((option) => option.value === selectValue)) {
+    elements.sortSelect.value = selectValue;
+  }
+
+  elements.sortHeaders.forEach((header) => {
+    const active = header.dataset.sortKey === state.sortKey;
+    header.classList.toggle("is-active", active);
+    header.dataset.direction = active ? state.sortDir : "";
+  });
+}
+
+function normalizeOfferText(value) {
+  return String(value ?? "").replace(/\u202f|\u00a0/g, " ").trim();
 }
 
 function label(value) {
