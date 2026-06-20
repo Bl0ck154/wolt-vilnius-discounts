@@ -90,33 +90,8 @@ runs-on: [self-hosted, Linux, X64, wolt]
 ```
 
 Reason: Wolt currently returns `429 Too Many Requests` from GitHub-hosted runner
-IP ranges even with browser-like headers and retry/backoff. The Contabo VPS IP
-is accepted by Wolt, so the scheduled checker runs from that server.
-
-Current runner details for future maintainers/agents:
-
-```text
-Provider: Contabo
-IP: [redacted-server-ip]
-Host: [redacted-server-host]
-OS: Ubuntu 24.04 LTS
-SSH key on local machine: ~/.ssh/[redacted-ssh-key-name]
-SSH user: root
-Runner install dir: /opt/actions-runner-wolt
-Runner service: actions.runner.Bl0ck154-wolt-vilnius-discounts.contabo-wolt.service
-Runner OS user: github-runner
-Runner name in GitHub: contabo-wolt
-Runner labels: self-hosted, Linux, X64, wolt, contabo
-```
-
-Useful maintenance commands on the VPS:
-
-```bash
-systemctl status actions.runner.Bl0ck154-wolt-vilnius-discounts.contabo-wolt.service
-systemctl restart actions.runner.Bl0ck154-wolt-vilnius-discounts.contabo-wolt.service
-journalctl -u actions.runner.Bl0ck154-wolt-vilnius-discounts.contabo-wolt.service -n 200 --no-pager
-cd /opt/actions-runner-wolt && ./svc.sh status
-```
+IP ranges even with browser-like headers and retry/backoff. The self-hosted
+runner uses a server/IP that is accepted by Wolt.
 
 Useful GitHub-side checks:
 
