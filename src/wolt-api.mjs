@@ -8,14 +8,27 @@ export function endpoints({ lat = CITY.lat, lon = CITY.lon } = {}) {
 }
 
 export async function fetchJson(url) {
-  const response = await fetch(url, { headers: WOLT_HEADERS });
-  const text = await response.text();
+  const maxAttempts = 4;
 
-  if (!response.ok) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const response = await fetch(url, { headers: WOLT_HEADERS });
+    const text = await response.text();
+
+    if (response.ok) {
+      return JSON.parse(text);
+    }
+
+    if (response.status === 429 && attempt < maxAttempts) {
+      const retryAfter = Number(response.headers.get("retry-after"));
+      const delayMs = Number.isFinite(retryAfter)
+        ? retryAfter * 1000
+        : 5000 * attempt * attempt;
+      await sleep(delayMs);
+      continue;
+    }
+
     throw new Error(`${response.status} ${response.statusText}: ${text.slice(0, 500)}`);
   }
-
-  return JSON.parse(text);
 }
 
 export function collectVenueItems(payload) {
@@ -54,10 +67,9 @@ export function uniqueByVenue(rows) {
 
 export async function fetchVilniusData() {
   const urls = endpoints();
-  const [restaurantsPayload, promotionsPayload] = await Promise.all([
-    fetchJson(urls.restaurants),
-    fetchJson(urls.promotions),
-  ]);
+  const restaurantsPayload = await fetchJson(urls.restaurants);
+  await sleep(2500);
+  const promotionsPayload = await fetchJson(urls.promotions);
 
   const restaurantRows = uniqueByVenue(collectVenueItems(restaurantsPayload));
   const promoRows = uniqueByVenue(collectVenueItems(promotionsPayload));
@@ -69,4 +81,8 @@ export async function fetchVilniusData() {
     restaurantRows,
     promoRows,
   };
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
