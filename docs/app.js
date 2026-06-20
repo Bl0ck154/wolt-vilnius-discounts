@@ -76,11 +76,11 @@ function renderRows() {
     .map((venue) => ({ venue, visibleOffers: visibleOffers(venue) }))
     .filter(({ venue }) => !productLine || venue.productLine === productLine)
     .filter(({ venue }) => matchesQuery(venue, query))
-    .filter(({ visibleOffers }) => visibleOffers.length > 0)
     .sort(sorter());
   const groups = groupRows(rows).slice(0, 1000);
+  const rowsWithVisibleOffers = rows.filter(({ visibleOffers }) => visibleOffers.length > 0).length;
 
-  elements.shownCount.textContent = `${formatNumber(state.rows.length)} total venues · ${formatNumber(rows.length)} with visible offers · ${formatNumber(groups.length)} grouped rows`;
+  elements.shownCount.textContent = `${formatNumber(rows.length)} shown venues · ${formatNumber(rowsWithVisibleOffers)} with visible offers · ${formatNumber(state.rows.length)} total venues`;
   syncSortUi();
 
   if (!groups.length) {
@@ -121,7 +121,7 @@ function renderVenueRow(venue, visibleOffers, index, groupSize = 1) {
     : `<div class="venue-image" aria-hidden="true"></div>`;
   const offers = visibleOffers.length
     ? visibleOffers.map((offer) => `<span class="offer ${offerClass(offer)}">${escapeHtml(offer.text)}</span>`).join("")
-    : `<span class="venue-meta">No text</span>`;
+    : `<span class="venue-meta">No visible offer badges</span>`;
   const best = bestDiscount(venue);
   const mapUrl = mapLink(venue);
   const hours = openingLabel(venue);
@@ -153,7 +153,9 @@ function renderGroupDetailRow(venue, visibleOffers, index) {
   const best = bestDiscount(venue);
   const hours = openingLabel(venue);
   const mapUrl = mapLink(venue);
-  const offers = visibleOffers.map((offer) => `<span class="offer ${offerClass(offer)}">${escapeHtml(offer.text)}</span>`).join("");
+  const offers = visibleOffers.length
+    ? visibleOffers.map((offer) => `<span class="offer ${offerClass(offer)}">${escapeHtml(offer.text)}</span>`).join("")
+    : `<span class="venue-meta">No visible offer badges</span>`;
 
   return `<tr>
     <td class="nested-num">${index}</td>
