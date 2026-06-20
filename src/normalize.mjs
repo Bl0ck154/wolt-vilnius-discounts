@@ -98,6 +98,8 @@ function normalizeOffer(sourcePath, raw) {
     amountLabel: discount?.label ?? null,
     category: classifyOffer(text),
     isDeliveryRelated: isDeliveryRelated(text),
+    isUtilityBadge: isUtilityOfferText(text),
+    score: scoreOffer({ text, amount: discount?.amount ?? null, amountType: discount?.type ?? null }),
     variant: raw.variant ?? raw.type ?? null,
     raw,
   };
@@ -115,7 +117,7 @@ function dedupeOffers(offers) {
     }
   }
 
-  return result;
+  return result.filter((offer) => !offer.isUtilityBadge);
 }
 
 export function normalizeText(text) {
@@ -148,8 +150,9 @@ export function extractDiscount(text = "") {
 function bestDiscount(offers) {
   const discounts = offers
     .filter((offer) => !offer.isDeliveryRelated)
+    .filter((offer) => !offer.isUtilityBadge)
     .filter((offer) => Number.isFinite(offer.amount))
-    .sort((a, b) => discountScore(b) - discountScore(a));
+    .sort((a, b) => scoreOffer(b) - scoreOffer(a));
 
   if (!discounts.length) {
     return null;
@@ -161,6 +164,7 @@ function bestDiscount(offers) {
     type: best.amountType,
     label: best.amountLabel,
     sourceText: best.text,
+    score: scoreOffer(best),
   };
 }
 
@@ -190,6 +194,10 @@ function isNewUserZeroDelivery(text) {
 
 function isDeliveryRelated(text) {
   return /delivery/i.test(normalizeText(text));
+}
+
+function isUtilityOfferText(text) {
+  return /^\d+\s+more$/i.test(normalizeText(text));
 }
 
 function formatAddress(address) {
@@ -265,7 +273,6 @@ function extractOpening(venue) {
     venue.opening_status,
     venue.status,
     venue.status_label,
-    venue.estimate_box?.subtitle,
   ]
     .filter(Boolean)
     .join(" ");
@@ -286,18 +293,36 @@ function extractOpening(venue) {
   }
 
   const hours = venue.opening_hours?.text ?? venue.opening_times?.text ?? venue.opening_time ?? null;
-  const label = rawStatus || (isOpen === true ? "Open" : isOpen === false ? "Closed" : hours ?? "Unknown");
+  const label = rawStatus || (isOpen === true ? "Open now" : isOpen === false ? "Closed" : hours ?? "Unknown");
 
   return { isOpen, label, hours };
 }
 
-function discountScore(offer) {
+function scoreOffer(offer) {
+  const text = normalizeText(offer.text).toLowerCase();
+  const amount = Number(offer.amount);
+  if (!Number.isFinite(amount) || isDeliveryRelated(text) || isUtilityOfferText(text)) {
+    return -1;
+  }
+
+  const selectedItems = /selected items?|selected products?|specific items?/i.test(text);
+  const hasMinimumSpend = /\bspend\b|minimum|min\.?\s*(?:order|spend|basket)|from\s+\d|over\s+\d|orders?\s+over/i.test(text);
+
   if (offer.amountType === "percent") {
-    return offer.amount;
+    if (/basket|menu|entire|everything|all items?|whole order|order discount/i.test(text)) {
+      return 5000 + amount;
+    }
+    if (selectedItems) {
+      return 1000 + amount;
+    }
+    return 4000 + amount;
   }
 
   if (offer.amountType === "money") {
-    return offer.amount;
+    if (hasMinimumSpend) {
+      return 2000 + amount;
+    }
+    return 3000 + amount;
   }
 
   return -1;

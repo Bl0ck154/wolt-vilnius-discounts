@@ -134,6 +134,10 @@ function visibleOffers(venue) {
     }
     seen.add(key);
 
+    if (isUtilityOfferText(offer.text)) {
+      return false;
+    }
+
     if (elements.hideNewUserDelivery.checked && isNewUserZeroDelivery(offer.text)) {
       return false;
     }
@@ -153,6 +157,8 @@ function sourceOffers(venue) {
       amount: offer.amount,
       amountType: offer.amountType,
       amountLabel: offer.amountLabel,
+      isUtilityBadge: offer.isUtilityBadge,
+      score: offer.score,
       sourcePath: offer.sourcePath,
     }));
   }
@@ -198,9 +204,10 @@ function bestSortValue(venue) {
 function bestDiscount(venue) {
   const discounts = sourceOffers(venue)
     .filter((offer) => !isDeliveryRelated(offer.text))
+    .filter((offer) => !isUtilityOfferText(offer.text))
     .map((offer) => ({ ...offer, discount: offerDiscount(offer) }))
     .filter((offer) => Number.isFinite(offer.discount?.amount))
-    .sort((a, b) => discountScore(b.discount) - discountScore(a.discount));
+    .sort((a, b) => offerScore(b) - offerScore(a));
 
   if (!discounts.length) {
     return null;
@@ -209,7 +216,7 @@ function bestDiscount(venue) {
   const best = discounts[0];
   return {
     label: best.discount.label,
-    score: discountScore(best.discount),
+    score: offerScore(best),
   };
 }
 
@@ -242,12 +249,35 @@ function extractDiscount(text = "") {
   return null;
 }
 
-function discountScore(discount) {
+function offerScore(offer) {
+  if (Number.isFinite(offer.score)) {
+    return offer.score;
+  }
+
+  const text = normalizeOfferText(offer.text).toLowerCase();
+  const discount = offer.discount ?? offerDiscount(offer);
+  const amount = Number(discount?.amount);
+  if (!Number.isFinite(amount) || isDeliveryRelated(text) || isUtilityOfferText(text)) {
+    return -1;
+  }
+
+  const selectedItems = /selected items?|selected products?|specific items?/i.test(text);
+  const hasMinimumSpend = /\bspend\b|minimum|min\.?\s*(?:order|spend|basket)|from\s+\d|over\s+\d|orders?\s+over/i.test(text);
+
   if (discount.type === "percent") {
-    return discount.amount;
+    if (/basket|menu|entire|everything|all items?|whole order|order discount/i.test(text)) {
+      return 5000 + amount;
+    }
+    if (selectedItems) {
+      return 1000 + amount;
+    }
+    return 4000 + amount;
   }
   if (discount.type === "money") {
-    return discount.amount;
+    if (hasMinimumSpend) {
+      return 2000 + amount;
+    }
+    return 3000 + amount;
   }
   return -1;
 }
@@ -296,15 +326,30 @@ function isDeliveryRelated(text = "") {
   return /delivery/i.test(normalizeOfferText(text));
 }
 
+function isUtilityOfferText(text = "") {
+  return /^\d+\s+more$/i.test(normalizeOfferText(text));
+}
+
 function openingLabel(venue) {
   const opening = venue.opening ?? {};
   if (opening.isOpen === true || venue.isOpen === true) {
-    return { icon: "🟢", text: opening.label ?? venue.openingStatus ?? "Open", className: "hours-open" };
+    return { icon: "🟢", text: humanOpeningText(opening.label ?? venue.openingStatus, "Open now"), className: "hours-open" };
   }
   if (opening.isOpen === false || venue.isOpen === false) {
-    return { icon: "🔴", text: opening.label ?? venue.openingStatus ?? "Closed", className: "hours-closed" };
+    return { icon: "🔴", text: humanOpeningText(opening.label ?? venue.openingStatus, "Closed"), className: "hours-closed" };
+  }
+  if (venue.estimateRange) {
+    return { icon: "🟢", text: "Likely open", className: "hours-open" };
   }
   return { icon: "⚪", text: opening.label ?? venue.openingStatus ?? venue.openingHours ?? "Unknown", className: "hours-unknown" };
+}
+
+function humanOpeningText(text, fallback) {
+  const normalized = normalizeOfferText(text);
+  if (!normalized || normalized.toLowerCase() === "min") {
+    return fallback;
+  }
+  return normalized;
 }
 
 function openScore(venue) {
@@ -314,6 +359,9 @@ function openScore(venue) {
   }
   if (opening.isOpen === false || venue.isOpen === false) {
     return 2;
+  }
+  if (venue.estimateRange) {
+    return 0;
   }
   return 1;
 }
