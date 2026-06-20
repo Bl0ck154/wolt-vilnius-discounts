@@ -80,7 +80,7 @@ function renderRows() {
     .sort(sorter());
   const groups = groupRows(rows).slice(0, 1000);
 
-  elements.shownCount.textContent = `${formatNumber(groups.length)} groups / ${formatNumber(rows.length)} venues / ${formatNumber(state.rows.length)} total`;
+  elements.shownCount.textContent = `${formatNumber(state.rows.length)} total venues · ${formatNumber(rows.length)} with visible offers · ${formatNumber(groups.length)} grouped rows`;
   syncSortUi();
 
   if (!groups.length) {
