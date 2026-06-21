@@ -3,8 +3,8 @@ name: Check Wolt discounts
 on:
   workflow_dispatch:
   schedule:
-    # GitHub cron is UTC. These are 12:30 and 17:30 for Kyiv/Vilnius summer time.
-    - cron: "30 9,14 * * *"
+    # GitHub cron is UTC. This is 12:30 for Kyiv/Vilnius summer time.
+    - cron: "30 9 * * *"
 
 permissions:
   contents: write
