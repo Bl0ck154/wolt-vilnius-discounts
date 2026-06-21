@@ -2,6 +2,9 @@ const state = {
   snapshot: null,
   citiesIndex: null,
   selectedCity: null,
+  apiBaseUrl: apiBaseUrl(),
+  snapshotSourceUrl: null,
+  snapshotSourceLabel: null,
   rows: [],
   sortKey: "best",
   sortDir: "desc",
@@ -45,28 +48,92 @@ async function init() {
 
 async function loadSnapshotForCity(cityId) {
   const city = cityById(cityId) ?? defaultCity();
-  const response = await fetch(dataPathForCity(city), { cache: "no-store" });
-  if (!response.ok) {
-    state.selectedCity = city;
-    state.snapshot = null;
-    state.rows = [];
-    elements.citySelect.value = city.id;
-    hydrateSummary();
-    hydrateFilters();
-    renderRows();
-    throw new Error(`No cached discount data yet for ${city.label ?? city.name}. Run the checker for this city first.`);
+  showLoading(city);
+
+  const staticResult = await loadStaticSnapshot(city);
+  const shouldUseApi = state.apiBaseUrl && (!staticResult.ok || isSnapshotStale(staticResult.snapshot));
+
+  if (shouldUseApi) {
+    try {
+      const apiResult = await loadApiSnapshot(city);
+      applySnapshot(city, apiResult.snapshot, apiResult.url, "live API cache");
+      return;
+    } catch (error) {
+      if (!staticResult.ok) {
+        throw error;
+      }
+      console.warn("Live API failed; falling back to static cache", error);
+      applySnapshot(city, staticResult.snapshot, staticResult.url, "stale static cache");
+      return;
+    }
   }
 
-  state.snapshot = await response.json();
+  if (!staticResult.ok) {
+    throw new Error(apiDisabledMessage(city));
+  }
+
+  applySnapshot(city, staticResult.snapshot, staticResult.url, "static cache");
+}
+
+async function loadStaticSnapshot(city) {
+  const url = dataPathForCity(city);
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) {
+    return { ok: false, status: response.status, url };
+  }
+  return { ok: true, url, snapshot: await response.json() };
+}
+
+async function loadApiSnapshot(city) {
+  const url = apiUrlForCity(city);
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) {
+    const message = await response.text().catch(() => "");
+    throw new Error(`Live API failed for ${city.label ?? city.name}: ${response.status} ${response.statusText}${message ? ` · ${message.slice(0, 200)}` : ""}`);
+  }
+  return { url, snapshot: await response.json() };
+}
+
+function applySnapshot(city, snapshot, sourceUrl, sourceLabel) {
+  state.snapshot = snapshot;
   state.selectedCity = { ...(state.snapshot.city ?? {}), ...city };
+  state.snapshotSourceUrl = sourceUrl;
+  state.snapshotSourceLabel = sourceLabel;
   state.rows = state.snapshot.venues ?? [];
   elements.citySelect.value = state.selectedCity.id;
+  rememberCachedCity(state.selectedCity, state.snapshot);
   hydrateSummary();
   hydrateFilters();
   renderRows();
 }
 
+function showLoading(city) {
+  state.selectedCity = city;
+  state.snapshot = null;
+  state.snapshotSourceUrl = null;
+  state.snapshotSourceLabel = null;
+  state.rows = [];
+  elements.citySelect.value = city.id;
+  hydrateSummary();
+  hydrateFilters();
+  elements.venueRows.innerHTML = `<tr><td colspan="7" class="empty">Loading ${escapeHtml(city.label ?? city.name)}...</td></tr>`;
+}
+
 async function loadCitiesIndex() {
+  const local = await loadLocalCitiesIndex();
+
+  if (state.apiBaseUrl) {
+    try {
+      return mergeCityIndexes(local, await loadApiCitiesIndex());
+    } catch (error) {
+      console.warn("Failed to load live API city index", error);
+    }
+  }
+
+  return local;
+}
+
+async function loadLocalCitiesIndex() {
   const response = await fetch("data/cities.json", { cache: "no-store" });
   if (response.ok) {
     return response.json();
@@ -92,6 +159,26 @@ async function loadCitiesIndex() {
         dataPath: "data/latest.json",
       },
     ],
+  };
+}
+
+async function loadApiCitiesIndex() {
+  const response = await fetch(`${state.apiBaseUrl}/api/cities`, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`${response.status} ${response.statusText}`);
+  }
+  return response.json();
+}
+
+function mergeCityIndexes(local, remote) {
+  const localById = new Map((local.cities ?? []).map((city) => [city.id, city]));
+  return {
+    ...local,
+    apiGeneratedAt: remote.generatedAt,
+    cities: (remote.cities ?? local.cities ?? []).map((city) => ({
+      ...localById.get(city.id),
+      ...city,
+    })),
   };
 }
 
@@ -131,8 +218,10 @@ function hydrateSummary() {
   elements.cityMapLink.href = cityMapUrl(city);
   elements.cityMapLink.title = `Open ${label} coordinates in Maps`;
   elements.cityMapLink.setAttribute("aria-label", `Open ${label} coordinates in Maps`);
-  elements.sourceLink.href = dataPathForCity(cityById(city.id) ?? city);
-  elements.sourceLink.textContent = `${city.key ?? city.id ?? "latest"}.json`;
+  elements.sourceLink.href = state.snapshotSourceUrl ?? dataPathForCity(cityById(city.id) ?? city);
+  elements.sourceLink.textContent = state.snapshotSourceLabel
+    ? `${city.key ?? city.id ?? "latest"}.json · ${state.snapshotSourceLabel}`
+    : `${city.key ?? city.id ?? "latest"}.json`;
   elements.promoCount.textContent = formatNumber(state.snapshot?.counts?.promotionsUniqueVenues);
   elements.restaurantCount.textContent = formatNumber(state.snapshot?.counts?.restaurantsUniqueVenues);
   elements.updatedAt.textContent = state.snapshot?.generatedAt ? new Date(state.snapshot.generatedAt).toLocaleString() : "not cached";
@@ -602,6 +691,99 @@ function dataPathForCity(city) {
   }
   const key = city?.key ?? String(city?.id ?? "").replace("/", "-");
   return city?.id === "ltu/vilnius" || city?.id === "vilnius" ? "data/latest.json" : `data/cities/${key}/latest.json`;
+}
+
+function apiUrlForCity(city) {
+  const cityId = city?.id ?? "";
+  if (!state.apiBaseUrl || !cityId.includes("/")) {
+    return null;
+  }
+  const [country, slug] = cityId.split("/", 2).map((part) => encodeURIComponent(part));
+  return `${state.apiBaseUrl}/api/cities/${country}/${slug}/latest`;
+}
+
+function apiBaseUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const fromQuery = params.has("api") ? params.get("api") : null;
+  if (fromQuery && ["off", "none", "false", "0"].includes(fromQuery.trim().toLowerCase())) {
+    safeLocalStorageRemove("WOLT_API_BASE_URL");
+    return "";
+  }
+
+  const fromWindow = window.WOLT_API_BASE_URL;
+  const fromStorage = safeLocalStorageGet("WOLT_API_BASE_URL");
+  const normalized = normalizeApiBaseUrl(fromQuery || fromWindow || fromStorage || "");
+
+  if (fromQuery && normalized) {
+    safeLocalStorageSet("WOLT_API_BASE_URL", normalized);
+  }
+
+  return normalized;
+}
+
+function safeLocalStorageGet(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeLocalStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // Ignore browsers/storage modes that block localStorage.
+  }
+}
+
+function normalizeApiBaseUrl(value) {
+  const trimmed = String(value ?? "").trim().replace(/\/+$/, "");
+  if (!trimmed) {
+    return "";
+  }
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString().replace(/\/+$/, "") : "";
+  } catch {
+    return "";
+  }
+}
+
+function safeLocalStorageRemove(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // Ignore browsers/storage modes that block localStorage.
+  }
+}
+
+function isSnapshotStale(snapshot) {
+  const ttlMs = Number(state.citiesIndex?.cacheTtlMs ?? 0);
+  if (!snapshot?.generatedAt || ttlMs <= 0) {
+    return false;
+  }
+  const generatedAt = Date.parse(snapshot.generatedAt);
+  return Number.isFinite(generatedAt) && Date.now() - generatedAt > ttlMs;
+}
+
+function apiDisabledMessage(city) {
+  const label = city.label ?? city.name;
+  return `No cached discount data yet for ${label}. Enable a live API backend with window.WOLT_API_BASE_URL or ?api=https://your-api-domain to fetch this city on demand.`;
+}
+
+function rememberCachedCity(city, snapshot) {
+  if (!state.citiesIndex?.cities || !city?.id || !snapshot) {
+    return;
+  }
+
+  const cached = state.citiesIndex.cities.find((candidate) => candidate.id === city.id);
+  if (!cached) {
+    return;
+  }
+
+  cached.updatedAt = snapshot.generatedAt ?? cached.updatedAt;
+  cached.counts = snapshot.counts ?? cached.counts;
 }
 
 function cityMapUrl(city) {

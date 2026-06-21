@@ -119,6 +119,82 @@ Wolt for that city.
 
 Use `FORCE_WRITE=true` to bypass the freshness check.
 
+## Optional live API backend
+
+GitHub Pages is static, so the dashboard cannot write new JSON snapshots by
+itself. For on-demand city loading, run the optional Node API on your own VPS.
+The public dashboard can then fall back to that API when a city has no fresh
+static JSON cache.
+
+Start locally:
+
+```bash
+npm run server
+```
+
+Default API bind is intentionally local-only:
+
+```text
+WOLT_API_HOST=127.0.0.1
+WOLT_API_PORT=3000
+```
+
+Useful API endpoints:
+
+```text
+GET /health
+GET /api/cities
+GET /api/cities/ltu/vilnius/latest
+GET /api/cities/deu/berlin/latest
+```
+
+The API uses a separate disk cache by default:
+
+```text
+.cache/wolt-api/cities/<country-city-slug>/latest.json
+```
+
+Important environment variables:
+
+```text
+WOLT_API_HOST=127.0.0.1
+WOLT_API_PORT=3000
+WOLT_API_CACHE_DIR=.cache/wolt-api
+WOLT_API_ALLOWED_ORIGINS=https://bl0ck154.github.io
+WOLT_API_RATE_LIMIT_REQUESTS=60
+WOLT_API_RATE_LIMIT_WINDOW_MS=60000
+WOLT_CACHE_TTL_HOURS=2
+```
+
+Recommended production shape:
+
+```text
+GitHub Pages dashboard
+  -> https://your-api-subdomain.example.com
+  -> nginx/Cloudflare
+  -> 127.0.0.1:3000 Node API
+  -> Wolt API + disk cache
+```
+
+Do not expose the Node port directly. Bind it to `127.0.0.1` and publish only
+HTTPS through nginx or another reverse proxy. The API URL is not committed to
+the repository. The dashboard enables live fallback only when configured at
+runtime:
+
+```text
+https://bl0ck154.github.io/wolt-discount-monitor/?api=https://your-api-subdomain.example.com
+```
+
+Opening the dashboard once with `?api=...` stores the API URL in that browser's
+local storage. Use `?api=off` to disable it again. Alternatively, inject this
+before `app.js` from hosting-specific HTML/config that is not committed:
+
+```html
+<script>
+  window.WOLT_API_BASE_URL = "https://your-api-subdomain.example.com";
+</script>
+```
+
 ## Notifications
 
 Telegram notifications remain limited to Vilnius by design:
