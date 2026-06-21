@@ -2,9 +2,13 @@ name: Check Wolt discounts
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [wolt-discount-check]
   schedule:
-    # GitHub cron is UTC. This is 12:30 for Kyiv/Vilnius summer time.
-    - cron: "30 9 * * *"
+    # GitHub cron is UTC. GitHub scheduled workflows can be delayed;
+    # exact runs should be triggered externally via repository_dispatch.
+    # These are 12:30 and 17:30 for Kyiv/Vilnius summer time.
+    - cron: "30 9,14 * * *"
 
 permissions:
   contents: write

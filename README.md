@@ -142,3 +142,5 @@ docs/data/notified-offers.json
 ```
 
 GitHub Pages is deployed by `.github/workflows/deploy-pages.yml` from the `docs/` folder.
+The workflow also redeploys after a successful discount check so Telegram and
+the public dashboard use the same data snapshot.
