@@ -85,7 +85,7 @@ export async function fetchCityData(city = CITY) {
   };
 }
 
-export async function fetchVilniusData() {
+export async function fetchDefaultCityData() {
   return fetchCityData(CITY);
 }
 

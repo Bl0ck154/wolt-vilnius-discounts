@@ -1,16 +1,19 @@
-# Wolt Vilnius promotions findings
+# Wolt promotions endpoint findings
 
-Date checked: 2026-06-20.
+Date checked: 2026-06-20. Initial research used Vilnius as the test city; the
+same coordinate-based endpoints are now used by the universal city monitor.
 
 ## Short conclusion
 
-Found the public web endpoint used by the Wolt promotions page:
+Found the public web endpoint used by Wolt city promotions pages:
 
 ```text
 GET https://consumer-api.wolt.com/v1/pages/venue-list/promotions-near-you?lon=25.2682558&lat=54.6901231
 ```
 
-It returns a seed list of venues with active offer/promotion fields. For the checked run it returned 1359 unique venues.
+It returns a seed list of venues with active offer/promotion fields for the
+requested coordinates. For the checked Vilnius run it returned 1359 unique
+venues.
 
 The required header is:
 
@@ -24,7 +27,7 @@ Without `Platform: Web`, the endpoint returns HTTP 200 with a `no-content` secti
 
 ## Promotions endpoint
 
-Full URL:
+Example URL:
 
 ```text
 https://consumer-api.wolt.com/v1/pages/venue-list/promotions-near-you?lon=25.2682558&lat=54.6901231
@@ -38,6 +41,9 @@ Required query params:
 lat=54.6901231
 lon=25.2682558
 ```
+
+For any other Wolt city, replace `lat` and `lon` with coordinates from the city
+catalog endpoint (`https://restaurant-api.wolt.com/v1/cities`).
 
 Required headers:
 
@@ -104,7 +110,7 @@ No pagination was observed in the tested response. The payload arrived as one `v
 
 ## Restaurants endpoint
 
-Full URL:
+Example URL:
 
 ```text
 https://consumer-api.wolt.com/v1/pages/restaurants?lat=54.6901231&lon=25.2682558
@@ -126,7 +132,9 @@ curl 'https://consumer-api.wolt.com/v1/pages/restaurants?lat=54.6901231&lon=25.2
   -H 'Accept: application/json, text/plain, */*'
 ```
 
-With `Platform: Web`, this endpoint also returned offer fields for `lukiskiu-kalejimas-20`. Without it, the same venue was present but `promotions`, `promotions_for_telemetry`, and `badges_v2` were empty.
+With `Platform: Web`, this endpoint also returned offer fields for the tested
+venue. Without it, the same venue was present but `promotions`,
+`promotions_for_telemetry`, and `badges_v2` were empty.
 
 Use this endpoint as an all-restaurants seed. Use the promotions endpoint as the smaller direct seed for active promo venues.
 

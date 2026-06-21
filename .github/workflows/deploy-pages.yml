@@ -3,7 +3,7 @@ name: Deploy GitHub Pages
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Check Wolt discounts"]
+    workflows: ["Update Wolt discount monitor"]
     types: [completed]
   push:
     branches: [main]

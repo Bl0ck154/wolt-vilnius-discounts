@@ -30,7 +30,7 @@ export function formatTelegramMessage(notification) {
   const appeared = notification.appeared ?? notification.interestingAppeared ?? [];
   const ended = notification.ended ?? [];
   const lines = [
-    "<b>Wolt Vilnius discounts</b>",
+    "<b>Wolt discount monitor · Vilnius</b>",
     `New valuable offers: <b>${appeared.length}</b>`,
     `Ended tracked offers: <b>${ended.length}</b>`,
     notification.allAppeared !== undefined

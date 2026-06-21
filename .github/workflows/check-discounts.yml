@@ -1,4 +1,4 @@
-name: Check Wolt discounts
+name: Update Wolt discount monitor
 
 on:
   workflow_dispatch:
@@ -13,10 +13,9 @@ on:
         default: false
         type: boolean
   schedule:
-    # GitHub cron is UTC and can be delayed. Use plain explicit cron entries
-    # that GitHub Actions reliably accepts; the local-time guard below skips
-    # late attempts. Includes summer and winter UTC offsets for 12:30 and
-    # 17:30 Europe/Vilnius.
+    # GitHub cron is UTC and can be delayed. Scheduled runs are intentionally
+    # guarded by Vilnius local-time windows because Telegram notifications are
+    # enabled only for the default Vilnius monitor.
     - cron: "30,35,40,45,50,55 9,10,14,15 * * *"
     - cron: "0,5 10,11,15,16 * * *"
 
@@ -24,7 +23,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: wolt-discount-check
+  group: wolt-discount-monitor-update
   cancel-in-progress: false
 
 jobs:
@@ -39,7 +38,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Check scheduled time window
+      - name: Check default notification window
         id: schedule-window
         if: ${{ github.event_name == 'schedule' }}
         shell: bash
@@ -48,17 +47,17 @@ jobs:
           minute=$(TZ=Europe/Vilnius date +%M)
           now_minutes=$((10#$hour * 60 + 10#$minute))
 
-          # Allow 12:30-13:05 and 17:30-18:05 Europe/Vilnius.
+          # Allow 12:30-13:05 and 17:30-18:05 Europe/Vilnius for notifications.
           if { [ "$now_minutes" -ge 750 ] && [ "$now_minutes" -le 785 ]; } || \
              { [ "$now_minutes" -ge 1050 ] && [ "$now_minutes" -le 1085 ]; }; then
             echo "run_check=true" >> "$GITHUB_OUTPUT"
-            echo "Scheduled run is inside the Vilnius notification window: ${hour}:${minute}"
+            echo "Scheduled run is inside the default notification window: ${hour}:${minute} Europe/Vilnius"
           else
             echo "run_check=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping delayed scheduled run outside Vilnius notification windows: ${hour}:${minute}"
+            echo "Skipping delayed scheduled run outside default notification windows: ${hour}:${minute} Europe/Vilnius"
           fi
 
-      - name: Check discounts
+      - name: Update discount data
         if: ${{ github.event_name != 'schedule' || steps.schedule-window.outputs.run_check == 'true' }}
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -76,5 +75,5 @@ jobs:
         if: ${{ github.event_name != 'schedule' || steps.schedule-window.outputs.run_check == 'true' }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update Wolt discount data"
+          commit_message: "Update Wolt discount monitor data"
           file_pattern: "docs/data/*.json docs/data/cities/**/*.json"

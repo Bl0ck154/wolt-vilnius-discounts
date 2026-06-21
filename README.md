@@ -1,188 +1,170 @@
-# Wolt discounts monitor
+# Wolt discount monitor
 
-Public Wolt web endpoint research plus a small scheduled monitor for city discounts.
-The dashboard is city-aware; Telegram notifications intentionally remain enabled
-only for Vilnius.
-It does not depend on the old project files.
+Universal Wolt discount dashboard and scheduled data updater. The project keeps a
+public catalog of Wolt cities/countries, fetches discount snapshots per city, and
+serves a static GitHub Pages dashboard from `docs/`.
 
-## Findings
+Telegram notifications are intentionally scoped to the default Vilnius monitor;
+other cities can be browsed and cached but do not send notifications.
 
-The Wolt web page `https://wolt.com/en/ltu/vilnius/promotions-near-you` calls:
+## What it does
+
+- Fetches the full public Wolt city catalog from:
+
+  ```text
+  https://restaurant-api.wolt.com/v1/cities
+  ```
+
+- Normalizes city ids as `country/city-slug`, for example:
+  - `ltu/vilnius`
+  - `deu/berlin`
+  - `jpn/tokyo`
+
+- Fetches city discount snapshots through public Wolt web endpoints using city
+  coordinates.
+- Caches snapshots in `docs/data/` and skips Wolt API calls while city data is
+  fresh.
+- Renders a static dashboard with country-grouped city selection.
+
+## Wolt endpoints used
+
+City catalog:
 
 ```text
-GET https://consumer-api.wolt.com/v1/pages/venue-list/promotions-near-you?lon=25.2682558&lat=54.6901231
+GET https://restaurant-api.wolt.com/v1/cities
 ```
 
-Required header:
+Promotion venues for any city coordinate:
+
+```text
+GET https://consumer-api.wolt.com/v1/pages/venue-list/promotions-near-you?lon=<lon>&lat=<lat>
+```
+
+Restaurant seed for any city coordinate:
+
+```text
+GET https://consumer-api.wolt.com/v1/pages/restaurants?lat=<lat>&lon=<lon>
+```
+
+Required header for the consumer API endpoints:
 
 ```text
 Platform: Web
 ```
 
-Without `Platform: Web`, the endpoint still returns HTTP 200, but the body is `no-content`.
-With `Platform: Web`, it returns a `venue-vertical-list` section with venues that have offer fields.
-
-Useful JSON paths:
+Useful offer paths in the Wolt response:
 
 ```text
-Venue list: sections[0].items[*].venue
-Offer data: sections[0].items[*].venue.promotions[*]
-UI badge data: sections[0].items[*].venue.badges_v2[*]
-Telemetry-only offers: sections[0].items[*].venue.promotions_for_telemetry[*]
+sections[*].items[*].venue.promotions[*]
+sections[*].items[*].venue.badges_v2[*]
+sections[*].items[*].venue.promotions_for_telemetry[*]
 ```
 
-For `lukiskiu-kalejimas-20`, the promo endpoint includes:
+## Run locally
 
-```json
-{
-  "campaign_id": "69c5251b0c0b699093092ff2",
-  "icon": "coupon-fill",
-  "is_offer_stackable": false,
-  "text": "2.50 EUR off",
-  "variant": "discount"
-}
-```
-
-The actual API text uses the euro symbol and a narrow non-breaking space; the text above is normalized for readability.
-
-The venue page also has a lightweight dynamic endpoint for one venue:
-
-```text
-GET https://consumer-api.wolt.com/order-xp/web/v1/venue/slug/lukiskiu-kalejimas-20/dynamic/?lat=54.6901231&lon=25.2682558&selected_delivery_method=homedelivery
-```
-
-Useful JSON path:
-
-```text
-Venue banner offers: venue.banners[*].discount.formatted_text
-```
-
-For this venue it returns normalized banner texts equivalent to `2.50 EUR off`, `0 EUR delivery for new users`, and `0 EUR delivery fee`.
-
-## Run
+No package install is required. The scripts use Node's built-in `fetch`.
 
 ```bash
-npm run check
-```
-
-City selection and cache controls:
-
-```bash
-# Default: Vilnius only
-node src/check-discounts.mjs
-
-# Refresh the full public Wolt city catalog
+# Refresh the full Wolt city/country catalog
 npm run cities
 
-# One city
-WOLT_CITY=ltu/kaunas node src/check-discounts.mjs
+# Update the default city (Vilnius)
+npm run check
 
-# Several cities
+# Update one city
+WOLT_CITY=deu/berlin node src/check-discounts.mjs
+
+# Update several cities
 WOLT_CITIES=ltu/vilnius,ltu/kaunas,lva/riga node src/check-discounts.mjs
 
-# All Wolt cities from the catalog (large run)
+# Update every Wolt city from the catalog (large run)
 WOLT_ALL_CITIES=true node src/check-discounts.mjs
 
-# Cache TTL in hours; default is 2
+# Override cache TTL in hours; default is 2
 WOLT_CACHE_TTL_HOURS=4 node src/check-discounts.mjs
 ```
 
-The city list is fetched from Wolt's public city endpoint:
+PowerShell example:
+
+```powershell
+$env:WOLT_CITY="deu/berlin"; node src/check-discounts.mjs; Remove-Item Env:\WOLT_CITY
+```
+
+Open `docs/index.html` locally or use GitHub Pages after pushing.
+
+## Data files
+
+The updater writes static JSON files consumed by the dashboard:
 
 ```text
-https://restaurant-api.wolt.com/v1/cities
+docs/data/city-catalog.json
+docs/data/cities.json
+docs/data/latest.json                         # default Vilnius snapshot
+docs/data/changes.json                        # default Vilnius diff
+docs/data/changes-log.json                    # default Vilnius change log
+docs/data/notified-offers.json                # Vilnius notification state
+docs/data/cities/<country-city-slug>/latest.json
+docs/data/cities/<country-city-slug>/changes.json
+docs/data/cities/<country-city-slug>/changes-log.json
 ```
 
-The generated catalog is stored at `docs/data/city-catalog.json` and currently
-contains hundreds of cities across all active Wolt countries. City ids use the
-stable `country/city-slug` form, for example `ltu/vilnius`, `deu/berlin`,
-`jpn/tokyo`. The Wolt API is queried again only when that city's last snapshot
-is older than the cache TTL.
+`docs/data/cities.json` contains the full dashboard city list plus cache status
+for cities that have already been fetched.
 
-Target venue plus dynamic endpoint check:
+## Cache behavior
 
-```bash
-npm run target
-```
+Each city has its own cache. If `latest.json` for a city is newer than
+`WOLT_CACHE_TTL_HOURS` (default `2`), the updater reuses it and does not call
+Wolt for that city.
 
-Custom slug:
+Use `FORCE_WRITE=true` to bypass the freshness check.
 
-```bash
-node src/wolt-promotions-poc.mjs --slug caffeine-gedimino-pr --dynamic
-```
+## Notifications
 
-No package install is required. The script only uses Node's built-in `fetch`.
-
-## GitHub Actions
-
-The workflow in `.github/workflows/check-discounts.yml` runs on a fixed cron schedule.
-There is no random sleep inside the script.
-
-The Wolt check job intentionally runs on a self-hosted runner instead of a
-GitHub-hosted runner:
-
-```yaml
-runs-on: [self-hosted, Linux, X64, wolt]
-```
-
-Reason: Wolt currently returns `429 Too Many Requests` from GitHub-hosted runner
-IP ranges even with browser-like headers and retry/backoff. The self-hosted
-runner uses a server/IP that is accepted by Wolt.
-
-Useful GitHub-side checks:
-
-```bash
-gh api repos/Bl0ck154/wolt-vilnius-discounts/actions/runners \
-  --jq '.runners[] | {name,status,busy,labels:[.labels[].name]}'
-
-gh workflow run "Check Wolt discounts" --repo Bl0ck154/wolt-vilnius-discounts --ref main
-gh run list --repo Bl0ck154/wolt-vilnius-discounts --workflow "Check Wolt discounts" --limit 5
-```
-
-Before changing the runner/server, verify Wolt works from that machine:
-
-```bash
-curl -i 'https://consumer-api.wolt.com/v1/pages/venue-list/promotions-near-you?lon=25.2682558&lat=54.6901231' \
-  -H 'Accept: application/json, text/plain, */*' \
-  -H 'Accept-Language: en-US,en;q=0.9' \
-  -H 'Platform: Web' \
-  -H 'Referer: https://wolt.com/' \
-  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36'
-```
-
-Expected result is HTTP `200` with JSON. HTTP `429` means the server/IP is not a
-good runner for this checker.
-
-Required repository secrets for Telegram notifications:
+Telegram notifications remain limited to Vilnius by design:
 
 ```text
 TELEGRAM_BOT_TOKEN
 TELEGRAM_CHAT_ID
 ```
 
-Optional repository variables:
+Optional notification variables:
 
 ```text
 MIN_DISCOUNT_EUR=3
 MIN_DISCOUNT_PERCENT=20
 INCLUDE_ZERO_DELIVERY=false
-WOLT_CACHE_TTL_HOURS=2
 ```
 
-The checker writes:
+Non-Vilnius cities are cached and displayed but skipped by Telegram.
 
-```text
-docs/data/latest.json
-docs/data/changes.json
-docs/data/changes-log.json
-docs/data/notified-offers.json
-docs/data/city-catalog.json
-docs/data/cities.json
-docs/data/cities/<country-city-slug>/latest.json
-docs/data/cities/<country-city-slug>/changes.json
-docs/data/cities/<country-city-slug>/changes-log.json
+## GitHub Actions
+
+Workflow: `.github/workflows/check-discounts.yml`
+
+- Scheduled runs update the default monitor inside Vilnius notification windows.
+- Manual runs accept:
+  - `cities`: comma-separated city ids, e.g. `deu/berlin,jpn/tokyo`
+  - `all_cities`: large run over the full catalog
+- The job uses a self-hosted runner because Wolt currently returns `429 Too Many
+  Requests` from GitHub-hosted runner IP ranges.
+
+```yaml
+runs-on: [self-hosted, Linux, X64, wolt]
 ```
 
-GitHub Pages is deployed by `.github/workflows/deploy-pages.yml` from the `docs/` folder.
-The workflow also redeploys after a successful discount check so Telegram and
-the public dashboard use the same data snapshot.
+Useful commands:
+
+```bash
+gh workflow run "Update Wolt discount monitor" --repo Bl0ck154/wolt-discount-monitor --ref main -f cities=deu/berlin
+gh run list --repo Bl0ck154/wolt-discount-monitor --workflow "Update Wolt discount monitor" --limit 5
+```
+
+GitHub Pages is deployed by `.github/workflows/deploy-pages.yml` from the
+`docs/` folder after pushes and successful updater runs.
+
+## Research notes
+
+Historical endpoint research is kept in `FINDINGS.md`. It started with Vilnius
+as the first tested city, but the implementation now applies the same endpoint
+patterns to any Wolt city from the catalog.

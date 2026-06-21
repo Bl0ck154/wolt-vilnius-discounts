@@ -78,7 +78,7 @@ async function checkCity(city) {
     skipped: true,
     reason: city.notificationsEnabled === true
       ? previous ? "No new interesting offers" : "Baseline created; no previous snapshot"
-      : "Notifications are enabled only for Vilnius",
+      : "Notifications are enabled only for the default Vilnius monitor",
   };
 
   if (shouldNotify) {
