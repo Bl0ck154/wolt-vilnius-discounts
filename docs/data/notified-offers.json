@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-06-21T11:59:32.360Z",
+  "updatedAt": "2026-06-21T15:59:07.819Z",
   "activeOffers": [
     {
       "stableKey": "du-kebabai|6a37115e4391212ba6fa2ba2",
       "firstNotifiedAt": "2026-06-21T11:59:32.360Z",
-      "lastSeenAt": "2026-06-21T11:59:32.360Z",
+      "lastSeenAt": "2026-06-21T15:59:07.819Z",
       "venue": {
         "id": "699462b7e86be0dbaddc3c7b",
         "slug": "du-kebabai",
@@ -23,7 +23,7 @@
     {
       "stableKey": "shark-tail-sushi|6a2b08702fc35c67b1c34e3b",
       "firstNotifiedAt": "2026-06-21T11:59:32.360Z",
-      "lastSeenAt": "2026-06-21T11:59:32.360Z",
+      "lastSeenAt": "2026-06-21T15:59:07.819Z",
       "venue": {
         "id": "5a0c03b05ce41f000b3d7830",
         "slug": "shark-tail-sushi",
