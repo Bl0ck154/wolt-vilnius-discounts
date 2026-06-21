@@ -2,13 +2,12 @@ name: Check Wolt discounts
 
 on:
   workflow_dispatch:
-  repository_dispatch:
-    types: [wolt-discount-check]
   schedule:
-    # GitHub cron is UTC. GitHub scheduled workflows can be delayed;
-    # exact runs should be triggered externally via repository_dispatch.
-    # These are 12:30 and 17:30 for Kyiv/Vilnius summer time.
-    - cron: "30 9,14 * * *"
+    # GitHub cron is UTC and can be delayed. Run several attempts around the
+    # target Vilnius windows; the local-time guard below skips late attempts.
+    # Includes both summer and winter UTC offsets for 12:30 and 17:30 Vilnius.
+    - cron: "30-59/5 9,10,14,15 * * *"
+    - cron: "0-5/5 10,11,15,16 * * *"
 
 permissions:
   contents: write
@@ -29,7 +28,27 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Check scheduled time window
+        id: schedule-window
+        if: ${{ github.event_name == 'schedule' }}
+        shell: bash
+        run: |
+          hour=$(TZ=Europe/Vilnius date +%H)
+          minute=$(TZ=Europe/Vilnius date +%M)
+          now_minutes=$((10#$hour * 60 + 10#$minute))
+
+          # Allow 12:30-13:05 and 17:30-18:05 Europe/Vilnius.
+          if { [ "$now_minutes" -ge 750 ] && [ "$now_minutes" -le 785 ]; } || \
+             { [ "$now_minutes" -ge 1050 ] && [ "$now_minutes" -le 1085 ]; }; then
+            echo "run_check=true" >> "$GITHUB_OUTPUT"
+            echo "Scheduled run is inside the Vilnius notification window: ${hour}:${minute}"
+          else
+            echo "run_check=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping delayed scheduled run outside Vilnius notification windows: ${hour}:${minute}"
+          fi
+
       - name: Check discounts
+        if: ${{ github.event_name != 'schedule' || steps.schedule-window.outputs.run_check == 'true' }}
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -39,6 +58,7 @@ jobs:
         run: node src/check-discounts.mjs
 
       - name: Commit updated data
+        if: ${{ github.event_name != 'schedule' || steps.schedule-window.outputs.run_check == 'true' }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update Wolt discount data"
