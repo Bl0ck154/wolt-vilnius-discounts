@@ -224,7 +224,9 @@ Non-Vilnius cities are cached and displayed but skipped by Telegram.
 
 Workflow: `.github/workflows/check-discounts.yml`
 
-- Scheduled runs update the default monitor inside Vilnius notification windows.
+- Exact scheduled runs should be triggered by an external cron via
+  `repository_dispatch`. GitHub's built-in `schedule` event is intentionally not
+  used because it can be delayed.
 - Manual runs accept:
   - `cities`: comma-separated city ids, e.g. `deu/berlin,jpn/tokyo`
   - `all_cities`: large run over the full catalog
@@ -240,6 +242,21 @@ Useful commands:
 ```bash
 gh workflow run "Update Wolt discount monitor" --repo Bl0ck154/wolt-discount-monitor --ref main -f cities=deu/berlin
 gh run list --repo Bl0ck154/wolt-discount-monitor --workflow "Update Wolt discount monitor" --limit 5
+```
+
+External cron example, using the machine's local timezone:
+
+```cron
+30 12,17 * * * cd /path/to/wolt-discount-monitor && GH_TOKEN=... ./scripts/trigger-wolt-monitor.sh
+```
+
+The dispatch helper accepts optional variables:
+
+```text
+WOLT_CITIES=ltu/vilnius
+WOLT_ALL_CITIES=false
+GITHUB_OWNER=Bl0ck154
+GITHUB_REPO=wolt-discount-monitor
 ```
 
 GitHub Pages is deployed by `.github/workflows/deploy-pages.yml` from the
