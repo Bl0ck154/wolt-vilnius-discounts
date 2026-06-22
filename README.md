@@ -177,17 +177,22 @@ GitHub Pages dashboard
 ```
 
 Do not expose the Node port directly. Bind it to `127.0.0.1` and publish only
-HTTPS through nginx or another reverse proxy. The API URL is not committed to
-the repository. The dashboard enables live fallback only when configured at
-runtime:
+HTTPS through nginx or another reverse proxy. The public dashboard uses the
+production API by default:
+
+```text
+https://wolt-api.zivkr.pp.ua
+```
+
+You can override it at runtime:
 
 ```text
 https://bl0ck154.github.io/wolt-discount-monitor/?api=https://your-api-subdomain.example.com
 ```
 
-Opening the dashboard once with `?api=...` stores the API URL in that browser's
-local storage. Use `?api=off` to disable it again. Alternatively, inject this
-before `app.js` from hosting-specific HTML/config that is not committed:
+Opening the dashboard with `?api=...` stores the override in that browser's
+local storage. Use `?api=off` to disable live API fallback for that browser.
+Alternatively, inject this before `app.js` from hosting-specific HTML/config:
 
 ```html
 <script>

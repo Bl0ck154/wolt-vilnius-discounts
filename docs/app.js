@@ -1,3 +1,5 @@
+const DEFAULT_API_BASE_URL = "https://wolt-api.zivkr.pp.ua";
+
 const state = {
   snapshot: null,
   citiesIndex: null,
@@ -707,14 +709,20 @@ function apiBaseUrl() {
   const fromQuery = params.has("api") ? params.get("api") : null;
   if (fromQuery && ["off", "none", "false", "0"].includes(fromQuery.trim().toLowerCase())) {
     safeLocalStorageRemove("WOLT_API_BASE_URL");
+    safeLocalStorageSet("WOLT_API_DISABLED", "true");
+    return "";
+  }
+
+  if (!fromQuery && safeLocalStorageGet("WOLT_API_DISABLED") === "true") {
     return "";
   }
 
   const fromWindow = window.WOLT_API_BASE_URL;
   const fromStorage = safeLocalStorageGet("WOLT_API_BASE_URL");
-  const normalized = normalizeApiBaseUrl(fromQuery || fromWindow || fromStorage || "");
+  const normalized = normalizeApiBaseUrl(fromQuery || fromWindow || fromStorage || DEFAULT_API_BASE_URL);
 
   if (fromQuery && normalized) {
+    safeLocalStorageRemove("WOLT_API_DISABLED");
     safeLocalStorageSet("WOLT_API_BASE_URL", normalized);
   }
 
