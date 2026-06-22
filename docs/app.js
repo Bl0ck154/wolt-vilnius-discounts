@@ -370,8 +370,8 @@ function groupRows(rows) {
   const byKey = new Map();
 
   for (const row of rows) {
-    const rootName = chainRootName(row.venue.name);
-    const key = [rootName.toLowerCase(), offerSignature(row.visibleOffers)].join("|");
+    const rootName = chainRootName(row.venue.name, row.venue.slug);
+    const key = rootName.toLowerCase();
     let group = byKey.get(key);
     if (!group) {
       group = { key, rootName, primary: row, rows: [] };
@@ -387,16 +387,93 @@ function groupRows(rows) {
   }));
 }
 
-function chainRootName(name = "") {
-  return String(name)
+const KNOWN_CHAIN_ROOTS = [
+  [/^bageterie\s+boulevard\b/i, "Bageterie Boulevard"],
+  [/^burger\s+king\b/i, "Burger King"],
+  [/^mcdonald'?s\b/i, "McDonald's"],
+  [/^pizza\s+hut(?:\s+express)?\b/i, "Pizza Hut"],
+  [/^kfc\b/i, "KFC"],
+  [/^starbucks\b/i, "Starbucks"],
+  [/^subway\b/i, "Subway"],
+  [/^popeyes\b/i, "Popeyes"],
+  [/^tesco\b/i, "Tesco"],
+  [/^billa\b/i, "BILLA"],
+  [/^albert\b/i, "Albert"],
+  [/^lidl\b/i, "Lidl"],
+  [/^kaufland\b/i, "Kaufland"],
+  [/^dm\s+drogerie\b/i, "dm drogerie"],
+  [/^rossmann\b/i, "Rossmann"],
+  [/^dr\.?\s*max\b/i, "Dr. Max"],
+  [/^hesburger\b/i, "Hesburger"],
+  [/^kika\b/i, "KIKA"],
+  [/^pepco\b/i, "PEPCO"],
+  [/^wingstreet\s+by\s+pizza\s+hut\b/i, "WingStreet by Pizza Hut"],
+  [/^t[eě]stoviny\s+z\s+pece\s+by\s+pizza\s+hut\b/i, "Těstoviny z pece by Pizza Hut"],
+];
+
+function chainRootName(name = "", slug = "") {
+  const original = String(name).trim();
+  const cleaned = original
     .replace(/\s*\([^)]*\)\s*$/g, "")
     .replace(/\s+-\s+[^-]+$/g, "")
     .replace(/\s{2,}/g, " ")
-    .trim() || String(name);
+    .trim();
+
+  for (const [pattern, root] of KNOWN_CHAIN_ROOTS) {
+    if (pattern.test(cleaned)) {
+      return root;
+    }
+  }
+
+  const slugRoot = chainRootFromSlug(slug);
+  if (slugRoot) {
+    return slugRoot;
+  }
+
+  return genericChainRoot(cleaned) || original;
 }
 
-function offerSignature(offers) {
-  return offers.map((offer) => normalizeOfferText(offer.text).toLowerCase()).sort().join("|");
+function chainRootFromSlug(slug = "") {
+  const normalized = String(slug).toLowerCase();
+  const knownSlugRoots = [
+    ["bageterie-boulevard", "Bageterie Boulevard"],
+    ["burger-king", "Burger King"],
+    ["mcdonalds", "McDonald's"],
+    ["pizza-hut", "Pizza Hut"],
+    ["kfc", "KFC"],
+    ["starbucks", "Starbucks"],
+    ["subway", "Subway"],
+    ["popeyes", "Popeyes"],
+    ["tesco", "Tesco"],
+    ["billa", "BILLA"],
+    ["albert", "Albert"],
+    ["lidl", "Lidl"],
+    ["kaufland", "Kaufland"],
+    ["dm-drogerie", "dm drogerie"],
+    ["rossmann", "Rossmann"],
+    ["dr-max", "Dr. Max"],
+    ["hesburger", "Hesburger"],
+    ["kika", "KIKA"],
+    ["pepco", "PEPCO"],
+    ["wingstreet-by-pizza-hut", "WingStreet by Pizza Hut"],
+    ["tstoviny-z-pece-by-pizza-hut", "Těstoviny z pece by Pizza Hut"],
+  ];
+
+  return knownSlugRoots.find(([prefix]) => normalized.startsWith(prefix))?.[1] ?? null;
+}
+
+function genericChainRoot(name) {
+  if (!name) {
+    return "";
+  }
+
+  return name
+    .replace(/\b(?:praha|prague|vilnius|kaunas|riga|tallinn)\b\s*/i, "")
+    .replace(/\s+\b(?:oc|tc|pc|cc|mall)\b\s+.+$/i, "")
+    .replace(/\s+\b(?:express|expres|hypermarket)\b\s+.+$/i, "")
+    .replace(/\s+\d+[\w.\-/]*.*$/i, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 }
 
 function visibleOffers(venue) {
