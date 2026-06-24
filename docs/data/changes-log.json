@@ -1,5 +1,20 @@
 [
   {
+    "generatedAt": "2026-06-24T15:52:50.568Z",
+    "previousGeneratedAt": "2026-06-24T09:30:46.737Z",
+    "appeared": 0,
+    "disappeared": 0,
+    "interestingAppeared": 0,
+    "notifiedNew": 0,
+    "notifiedEnded": 0,
+    "fetchError": {
+      "message": "429 Too Many Requests: ",
+      "at": "2026-06-24T15:52:50.568Z"
+    },
+    "interesting": [],
+    "ended": []
+  },
+  {
     "generatedAt": "2026-06-24T09:30:46.737Z",
     "previousGeneratedAt": "2026-06-23T09:30:35.761Z",
     "appeared": 2,

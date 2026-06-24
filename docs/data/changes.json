@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-24T09:30:46.737Z",
-  "previousGeneratedAt": "2026-06-23T09:30:35.761Z",
+  "generatedAt": "2026-06-24T15:52:50.568Z",
+  "previousGeneratedAt": "2026-06-24T09:30:46.737Z",
   "counts": {
     "restaurantsUniqueVenues": 817,
     "promotionsUniqueVenues": 1351,
@@ -15,132 +15,14 @@
       "restaurant": 817
     }
   },
-  "appeared": [
-    {
-      "venue": {
-        "id": "62c69460d5cba8f2a7c0f276",
-        "slug": "pink-ocean-geles",
-        "name": "Pink Ocean Gėlės",
-        "productLine": "florist",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/pink-ocean-geles",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/bce1d6dd-d83d-405c-b1ba-e8a89a131c03/c693660d-3226-4c83-acd0-1d80f157558f"
-      },
-      "stableKey": "pink-ocean-geles|6a3a7bfb6eaa45dc621e51d5",
-      "key": "venue.promotions:6a3a7bfb6eaa45dc621e51d5",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a3a7bfb6eaa45dc621e51d5",
-      "text": "20% off (up to 50 €)",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 1520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a3a7bfb6eaa45dc621e51d5",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "20% off (up to 50 €)",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "6a3120b59242c39ca7ceed5e",
-        "slug": "tomo-senkaus-gurmaniski-grybai",
-        "name": "Tomo Senkaus gurmaniški grybai",
-        "productLine": "health_and_beauty",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/tomo-senkaus-gurmaniski-grybai",
-        "imageUrl": "https://imageproxy.wolt.com/assets/6a33ba04114c543b9136a5f7"
-      },
-      "stableKey": "tomo-senkaus-gurmaniski-grybai|6a3a6a8ba1dafaa5a013ffca",
-      "key": "venue.promotions_for_telemetry:6a3a6a8ba1dafaa5a013ffca",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a3a6a8ba1dafaa5a013ffca",
-      "text": "10% off",
-      "amount": 10,
-      "amountType": "percent",
-      "amountLabel": "10%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 1510,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a3a6a8ba1dafaa5a013ffca",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "10% off",
-        "variant": "discount"
-      }
-    }
-  ],
-  "disappeared": [
-    {
-      "venue": {
-        "id": "644663b3eaafa5309027ce11",
-        "slug": "florielle",
-        "name": "Florielle",
-        "productLine": "florist",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/florielle",
-        "imageUrl": "https://imageproxy.wolt.com/assets/673207519eaa2e574dd744d4"
-      },
-      "stableKey": "florielle|6a2d68f67888e11acd1e2864",
-      "key": "venue.promotions_for_telemetry:6a2d68f67888e11acd1e2864",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a2d68f67888e11acd1e2864",
-      "text": "10% off (up to 50 €)",
-      "amount": 10,
-      "amountType": "percent",
-      "amountLabel": "10%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 1510,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2d68f67888e11acd1e2864",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "10% off (up to 50 €)",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "5a0c03b05ce41f000b3d7830",
-        "slug": "shark-tail-sushi",
-        "name": "Pokito",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/shark-tail-sushi",
-        "imageUrl": "https://imageproxy.wolt.com/assets/691c32e1f6a3afc908653a60"
-      },
-      "stableKey": "shark-tail-sushi|6a2b08702fc35c67b1c34e3b",
-      "key": "venue.promotions:6a2b08702fc35c67b1c34e3b",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2b08702fc35c67b1c34e3b",
-      "text": "15% off (up to 50 €)",
-      "amount": 15,
-      "amountType": "percent",
-      "amountLabel": "15%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 1515,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2b08702fc35c67b1c34e3b",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "15% off (up to 50 €)",
-        "variant": "discount"
-      }
-    }
-  ],
+  "appeared": [],
+  "disappeared": [],
   "interestingAppeared": [],
   "interestingDisappeared": [],
+  "fetchError": {
+    "message": "429 Too Many Requests: ",
+    "at": "2026-06-24T15:52:50.568Z"
+  },
   "newInteresting": [],
   "endedNotified": [],
   "notifiedSummary": {
