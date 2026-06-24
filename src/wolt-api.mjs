@@ -75,7 +75,7 @@ export async function fetchCityData(city = CITY) {
   let restaurantsPayload = { sections: [] };
 
   try {
-    promotionsPayload = await fetchJson(urls.promotions, { maxAttempts: 3 });
+    promotionsPayload = await fetchJson(urls.promotions, { maxAttempts: 1 });
   } catch (error) {
     console.warn(`Could not fetch promotions endpoint; falling back to restaurant venues: ${error.message}`);
   }
@@ -83,7 +83,10 @@ export async function fetchCityData(city = CITY) {
   await sleep(5000);
 
   try {
-    restaurantsPayload = await fetchJson(urls.restaurants, { maxAttempts: promotionsPayload.sections?.length ? 3 : 7 });
+    restaurantsPayload = await fetchJson(urls.restaurants, {
+      maxAttempts: promotionsPayload.sections?.length ? 2 : 3,
+      retryBaseMs: 15000,
+    });
   } catch (error) {
     if (!promotionsPayload.sections?.length) {
       throw error;

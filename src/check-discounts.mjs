@@ -44,7 +44,52 @@ async function checkCity(city) {
     });
   }
 
-  const current = normalizeSnapshot(await fetchCityData(city));
+  let current;
+  try {
+    current = normalizeSnapshot(await fetchCityData(city));
+  } catch (error) {
+    if (!previous) {
+      throw error;
+    }
+
+    const generatedAt = new Date().toISOString();
+    const fetchError = {
+      message: error.message,
+      at: generatedAt,
+    };
+    const changes = {
+      generatedAt,
+      previousGeneratedAt: previous.generatedAt,
+      counts: previous.counts,
+      appeared: [],
+      disappeared: [],
+      interestingAppeared: [],
+      interestingDisappeared: [],
+      fetchError,
+    };
+
+    await writeJson(paths.changes, {
+      ...changes,
+      newInteresting: [],
+      endedNotified: [],
+      notifiedSummary: {
+        newInteresting: 0,
+        endedNotified: 0,
+      },
+    });
+    await appendChangeLog(paths.log, changes, { newInteresting: [], endedNotified: [], fetchError });
+
+    return cityResult(city, previous, {
+      cacheHit: false,
+      fetchError,
+      appeared: 0,
+      disappeared: 0,
+      interestingAppeared: 0,
+      interestingEnded: 0,
+      wroteFiles: true,
+      telegram: { skipped: true, reason: `Wolt API fetch failed; kept previous snapshot: ${error.message}` },
+    });
+  }
   const changes = diffSnapshots(previous, current);
   const currentOffers = offerIndex(current);
   const currentInteresting = interestingOfferIndex(current);
@@ -268,6 +313,7 @@ async function appendChangeLog(path, changes, notification = {}) {
     interestingAppeared: changes.interestingAppeared.length,
     notifiedNew: newInteresting.length,
     notifiedEnded: endedNotified.length,
+    fetchError: notification.fetchError ?? changes.fetchError ?? null,
     interesting: newInteresting.slice(0, 50),
     ended: endedNotified.slice(0, 50),
   };
