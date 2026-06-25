@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-25T06:26:05.415Z",
-  "previousGeneratedAt": "2026-06-24T09:30:46.737Z",
+  "generatedAt": "2026-06-25T09:30:25.363Z",
+  "previousGeneratedAt": "2026-06-25T06:26:05.415Z",
   "counts": {
     "restaurantsUniqueVenues": 817,
     "promotionsUniqueVenues": 1351,
@@ -16,68 +16,6 @@
     }
   },
   "appeared": [
-    {
-      "venue": {
-        "id": "67989127c76a2b41a2d329b2",
-        "slug": "360-food-pavilnioniu-g",
-        "name": "360 Food",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/360-food-pavilnioniu-g",
-        "imageUrl": "https://imageproxy.wolt.com/assets/684154ee0cce83d932607f50"
-      },
-      "stableKey": "360-food-pavilnioniu-g|6a3c47921d8850fe27f89a19",
-      "key": "venue.promotions_for_telemetry:6a3c47921d8850fe27f89a19",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a3c47921d8850fe27f89a19",
-      "text": "20% off",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 1520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a3c47921d8850fe27f89a19",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "20% off",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "69bcfeb8a73033bf38c376cb",
-        "slug": "vingio-istorijos",
-        "name": "Vingio Istorijos",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/vingio-istorijos",
-        "imageUrl": "https://imageproxy.wolt.com/assets/69fb32072a1e1d86482a4ff2"
-      },
-      "stableKey": "vingio-istorijos|6a3bdde81d8850fe27f88e41",
-      "key": "venue.promotions:6a3bdde81d8850fe27f88e41",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a3bdde81d8850fe27f88e41",
-      "text": "15% off (up to 50 €)",
-      "amount": 15,
-      "amountType": "percent",
-      "amountLabel": "15%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 1515,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a3bdde81d8850fe27f88e41",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "15% off (up to 50 €)",
-        "variant": "discount"
-      }
-    }
-  ],
-  "disappeared": [
     {
       "venue": {
         "id": "5e84aa2942cdedcf8dc677d5",
@@ -177,58 +115,29 @@
         "link": "https://wolt.com/en/ltu/vilnius/venue/savam-kieme",
         "imageUrl": "https://imageproxy.wolt.com/assets/67dc24ef829e4a2306e07b55"
       },
-      "stableKey": "savam-kieme|6a3426088d3e224f2cd143b4",
-      "key": "venue.promotions_for_telemetry:6a3426088d3e224f2cd143b4",
+      "stableKey": "savam-kieme|6a3ccbac1d8850fe27f89e78",
+      "key": "venue.promotions_for_telemetry:6a3ccbac1d8850fe27f89e78",
       "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a3426088d3e224f2cd143b4",
-      "text": "10% off selected items",
-      "amount": 10,
+      "campaignId": "6a3ccbac1d8850fe27f89e78",
+      "text": "20% off selected items",
+      "amount": 20,
       "amountType": "percent",
-      "amountLabel": "10%",
+      "amountLabel": "20%",
       "category": "percent",
       "isDeliveryRelated": false,
       "isUtilityBadge": false,
-      "score": 510,
+      "score": 520,
       "variant": "discount",
       "raw": {
-        "campaign_id": "6a3426088d3e224f2cd143b4",
+        "campaign_id": "6a3ccbac1d8850fe27f89e78",
         "icon": "coupon-fill",
         "is_offer_stackable": true,
-        "text": "10% off selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "678e4936181346461fff055c",
-        "slug": "savam-kieme",
-        "name": "Savam kieme",
-        "productLine": "grocery",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/savam-kieme",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67dc24ef829e4a2306e07b55"
-      },
-      "stableKey": "savam-kieme|6a3a20993a749806e10d8bc1",
-      "key": "venue.promotions_for_telemetry:6a3a20993a749806e10d8bc1",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a3a20993a749806e10d8bc1",
-      "text": "10% off selected items",
-      "amount": 10,
-      "amountType": "percent",
-      "amountLabel": "10%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 510,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a3a20993a749806e10d8bc1",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "10% off selected items",
+        "text": "20% off selected items",
         "variant": "discount"
       }
     }
   ],
+  "disappeared": [],
   "interestingAppeared": [],
   "interestingDisappeared": [],
   "newInteresting": [],
