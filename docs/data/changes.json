@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-29T09:30:26.118Z",
-  "previousGeneratedAt": "2026-06-28T14:30:26.360Z",
+  "generatedAt": "2026-06-29T14:30:25.924Z",
+  "previousGeneratedAt": "2026-06-29T09:30:26.118Z",
   "counts": {
     "restaurantsUniqueVenues": 818,
-    "promotionsUniqueVenues": 1351,
+    "promotionsUniqueVenues": 1352,
     "productLines": {
       "alcohol": 80,
-      "florist": 68,
+      "florist": 69,
       "general_merchandise": 46,
       "grocery": 224,
       "health_and_beauty": 42,
@@ -18,74 +18,14 @@
   "appeared": [
     {
       "venue": {
-        "id": "642aa344f8b8dd06df40ceff",
-        "slug": "agnifood",
-        "name": "AgniFood",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/agnifood",
-        "imageUrl": "https://imageproxy.wolt.com/assets/6732083626e644617b063d79"
+        "id": "6a313c6ac1907a7c100d95db",
+        "slug": "pasaku-geles",
+        "name": "Pasakų gėlės",
+        "productLine": "florist",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/pasaku-geles",
+        "imageUrl": "https://imageproxy.wolt.com/assets/6a3cfcf7c3bb1f158fea3803"
       },
-      "stableKey": "agnifood|6a415694f634140a2da98f07",
-      "key": "venue.promotions:6a415694f634140a2da98f07",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a415694f634140a2da98f07",
-      "text": "5 € off (spend 30 €)",
-      "amount": 5,
-      "amountType": "money",
-      "amountLabel": "5 EUR",
-      "category": "money",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 2505,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a415694f634140a2da98f07",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "5 € off (spend 30 €)",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "642aa344f8b8dd06df40ceff",
-        "slug": "agnifood",
-        "name": "AgniFood",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/agnifood",
-        "imageUrl": "https://imageproxy.wolt.com/assets/6732083626e644617b063d79"
-      },
-      "stableKey": "agnifood|6a41563de29e7b3713f2163e",
-      "key": "venue.promotions_for_telemetry:6a41563de29e7b3713f2163e",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a41563de29e7b3713f2163e",
-      "text": "20% off selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a41563de29e7b3713f2163e",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "20% off selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "674ec25a720dc327a93c6737",
-        "slug": "baltu-kebabine",
-        "name": "Baltų Kebabinė",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/baltu-kebabine",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67615dc8ab4f9f4331ad8d1c"
-      },
-      "stableKey": "baltu-kebabine|6a2bb9ab2579f27f0d5e87c1",
+      "stableKey": "pasaku-geles|6a2bb9ab2579f27f0d5e87c1",
       "key": "venue.promotions:6a2bb9ab2579f27f0d5e87c1",
       "sourcePath": "venue.promotions",
       "campaignId": "6a2bb9ab2579f27f0d5e87c1",
@@ -108,17 +48,47 @@
     },
     {
       "venue": {
-        "id": "678e4936181346461fff055c",
-        "slug": "savam-kieme",
-        "name": "Savam kieme",
-        "productLine": "grocery",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/savam-kieme",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67dc24ef829e4a2306e07b55"
+        "id": "60decf931b264dcf1ea34cce",
+        "slug": "peliukas-flower",
+        "name": "Peliukas Flower Shop",
+        "productLine": "florist",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/peliukas-flower",
+        "imageUrl": "https://imageproxy.wolt.com/mes-image/480a73b5-bda8-4d13-81cd-459f8b1170d4/780e8bec-098d-4372-a829-47ddc64fa74b"
       },
-      "stableKey": "savam-kieme|6a4147cff634140a2da98d7e",
-      "key": "venue.promotions_for_telemetry:6a4147cff634140a2da98d7e",
+      "stableKey": "peliukas-flower|6a4263b7517d0e13fa85394b",
+      "key": "venue.promotions_for_telemetry:6a4263b7517d0e13fa85394b",
       "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a4147cff634140a2da98d7e",
+      "campaignId": "6a4263b7517d0e13fa85394b",
+      "text": "10% off selected items",
+      "amount": 10,
+      "amountType": "percent",
+      "amountLabel": "10%",
+      "category": "percent",
+      "isDeliveryRelated": false,
+      "isUtilityBadge": false,
+      "score": 510,
+      "variant": "discount",
+      "raw": {
+        "campaign_id": "6a4263b7517d0e13fa85394b",
+        "icon": "coupon-fill",
+        "is_offer_stackable": true,
+        "text": "10% off selected items",
+        "variant": "discount"
+      }
+    },
+    {
+      "venue": {
+        "id": "60decf931b264dcf1ea34cce",
+        "slug": "peliukas-flower",
+        "name": "Peliukas Flower Shop",
+        "productLine": "florist",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/peliukas-flower",
+        "imageUrl": "https://imageproxy.wolt.com/mes-image/480a73b5-bda8-4d13-81cd-459f8b1170d4/780e8bec-098d-4372-a829-47ddc64fa74b"
+      },
+      "stableKey": "peliukas-flower|6a42640c09bb66106489e175",
+      "key": "venue.promotions_for_telemetry:6a42640c09bb66106489e175",
+      "sourcePath": "venue.promotions_for_telemetry",
+      "campaignId": "6a42640c09bb66106489e175",
       "text": "20% off selected items",
       "amount": 20,
       "amountType": "percent",
@@ -129,7 +99,7 @@
       "score": 520,
       "variant": "discount",
       "raw": {
-        "campaign_id": "6a4147cff634140a2da98d7e",
+        "campaign_id": "6a42640c09bb66106489e175",
         "icon": "coupon-fill",
         "is_offer_stackable": true,
         "text": "20% off selected items",
@@ -138,140 +108,18 @@
     },
     {
       "venue": {
-        "id": "5fb5390696d58311eba6fc44",
-        "slug": "skonio-chuliganai",
-        "name": "Skonio chuliganai",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/skonio-chuliganai",
-        "imageUrl": "https://imageproxy.wolt.com/assets/673208c163ae2357e7f7c7a9"
+        "id": "60decf931b264dcf1ea34cce",
+        "slug": "peliukas-flower",
+        "name": "Peliukas Flower Shop",
+        "productLine": "florist",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/peliukas-flower",
+        "imageUrl": "https://imageproxy.wolt.com/mes-image/480a73b5-bda8-4d13-81cd-459f8b1170d4/780e8bec-098d-4372-a829-47ddc64fa74b"
       },
-      "stableKey": "skonio-chuliganai|6a2bb9ab2579f27f0d5e87c1",
-      "key": "venue.promotions:6a2bb9ab2579f27f0d5e87c1",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2bb9ab2579f27f0d5e87c1",
-      "text": "0€ delivery for new users",
-      "amount": 0,
-      "amountType": "money",
-      "amountLabel": "0 EUR",
-      "category": "new-user-delivery",
-      "isDeliveryRelated": true,
-      "isUtilityBadge": false,
-      "score": -1,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2bb9ab2579f27f0d5e87c1",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "0€ delivery for new users",
-        "variant": "discount"
-      }
-    }
-  ],
-  "disappeared": [
-    {
-      "venue": {
-        "id": "5e84aa2942cdedcf8dc677d5",
-        "slug": "chief-pizza-dzuku-g",
-        "name": "Chief Pizza (Dzūkų g.)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/chief-pizza-dzuku-g",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67332fad29cd4b694e529aa4"
-      },
-      "stableKey": "chief-pizza-dzuku-g|6a3919f14de89a85e14ce613",
-      "key": "venue.promotions_for_telemetry:6a3919f14de89a85e14ce613",
+      "stableKey": "peliukas-flower|6a426488bd2bda139aa4b9d2",
+      "key": "venue.promotions_for_telemetry:6a426488bd2bda139aa4b9d2",
       "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a3919f14de89a85e14ce613",
-      "text": "20% off selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a3919f14de89a85e14ce613",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "20% off selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "5e8b21c27b8427c54e1794d6",
-        "slug": "chief-pizza-sauletekis",
-        "name": "Chief Pizza (Saulėtekis)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/chief-pizza-sauletekis",
-        "imageUrl": "https://imageproxy.wolt.com/assets/6733302729cd4b694e52a1b3"
-      },
-      "stableKey": "chief-pizza-sauletekis|6a391b10ba53abe9d0ce8ae6",
-      "key": "venue.promotions_for_telemetry:6a391b10ba53abe9d0ce8ae6",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a391b10ba53abe9d0ce8ae6",
-      "text": "20% off selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a391b10ba53abe9d0ce8ae6",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "20% off selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "5fa53c3cd2697f83c1b19e9b",
-        "slug": "chief-pizza-zemaites-g",
-        "name": "Chief Pizza (Žemaitės g.)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/chief-pizza-zemaites-g",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67320836479a971266a692c7"
-      },
-      "stableKey": "chief-pizza-zemaites-g|6a390e3aba53abe9d0ce888e",
-      "key": "venue.promotions_for_telemetry:6a390e3aba53abe9d0ce888e",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a390e3aba53abe9d0ce888e",
-      "text": "20% off selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a390e3aba53abe9d0ce888e",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "20% off selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "685d2cd29df8286ecef2d48e",
-        "slug": "kfc-akropolis",
-        "name": "KFC (Akropolis)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/kfc-akropolis",
-        "imageUrl": "https://imageproxy.wolt.com/assets/685d2d0a614bb013e9319b62"
-      },
-      "stableKey": "kfc-akropolis|6a33d5bbd4b4b0fa7fa2b5ca",
-      "key": "venue.promotions_for_telemetry:6a33d5bbd4b4b0fa7fa2b5ca",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a33d5bbd4b4b0fa7fa2b5ca",
-      "text": "-30% Burger & Tortilla meals",
+      "campaignId": "6a426488bd2bda139aa4b9d2",
+      "text": "30% off selected items",
       "amount": 30,
       "amountType": "percent",
       "amountLabel": "30%",
@@ -281,580 +129,40 @@
       "score": 530,
       "variant": "discount",
       "raw": {
-        "campaign_id": "6a33d5bbd4b4b0fa7fa2b5ca",
+        "campaign_id": "6a426488bd2bda139aa4b9d2",
         "icon": "coupon-fill",
         "is_offer_stackable": true,
-        "text": "-30% Burger & Tortilla meals",
+        "text": "30% off selected items",
         "variant": "discount"
       }
     },
     {
       "venue": {
-        "id": "693ff6852524d6ca70c0c79b",
-        "slug": "kfc-cup",
-        "name": "KFC (CUP)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/kfc-cup",
-        "imageUrl": "https://imageproxy.wolt.com/assets/693ff6a9412f4b47cf4c30fc"
+        "id": "60decf931b264dcf1ea34cce",
+        "slug": "peliukas-flower",
+        "name": "Peliukas Flower Shop",
+        "productLine": "florist",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/peliukas-flower",
+        "imageUrl": "https://imageproxy.wolt.com/mes-image/480a73b5-bda8-4d13-81cd-459f8b1170d4/780e8bec-098d-4372-a829-47ddc64fa74b"
       },
-      "stableKey": "kfc-cup|6a33d5bbd4b4b0fa7fa2b5ca",
-      "key": "venue.promotions_for_telemetry:6a33d5bbd4b4b0fa7fa2b5ca",
+      "stableKey": "peliukas-flower|6a4264e6bd2bda139aa4b9de",
+      "key": "venue.promotions_for_telemetry:6a4264e6bd2bda139aa4b9de",
       "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a33d5bbd4b4b0fa7fa2b5ca",
-      "text": "-30% Burger & Tortilla meals",
-      "amount": 30,
+      "campaignId": "6a4264e6bd2bda139aa4b9de",
+      "text": "15% off selected items",
+      "amount": 15,
       "amountType": "percent",
-      "amountLabel": "30%",
+      "amountLabel": "15%",
       "category": "percent",
       "isDeliveryRelated": false,
       "isUtilityBadge": false,
-      "score": 530,
+      "score": 515,
       "variant": "discount",
       "raw": {
-        "campaign_id": "6a33d5bbd4b4b0fa7fa2b5ca",
+        "campaign_id": "6a4264e6bd2bda139aa4b9de",
         "icon": "coupon-fill",
         "is_offer_stackable": true,
-        "text": "-30% Burger & Tortilla meals",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "5b1d572ec18b47000b6b22e0",
-        "slug": "kfc",
-        "name": "KFC (Gedimino pr.)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/kfc",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67332fbc308c8149ae83548b"
-      },
-      "stableKey": "kfc|6a33d5bbd4b4b0fa7fa2b5ca",
-      "key": "venue.promotions_for_telemetry:6a33d5bbd4b4b0fa7fa2b5ca",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a33d5bbd4b4b0fa7fa2b5ca",
-      "text": "-30% Burger & Tortilla meals",
-      "amount": 30,
-      "amountType": "percent",
-      "amountLabel": "30%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 530,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a33d5bbd4b4b0fa7fa2b5ca",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-30% Burger & Tortilla meals",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "655cc794b29932b3fcf99ff8",
-        "slug": "kfc-mandarinas",
-        "name": "KFC (Mandarinas)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/kfc-mandarinas",
-        "imageUrl": "https://imageproxy.wolt.com/assets/673208e6d775830ca1efcd77"
-      },
-      "stableKey": "kfc-mandarinas|6a33d5bbd4b4b0fa7fa2b5ca",
-      "key": "venue.promotions_for_telemetry:6a33d5bbd4b4b0fa7fa2b5ca",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a33d5bbd4b4b0fa7fa2b5ca",
-      "text": "-30% Burger & Tortilla meals",
-      "amount": 30,
-      "amountType": "percent",
-      "amountLabel": "30%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 530,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a33d5bbd4b4b0fa7fa2b5ca",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-30% Burger & Tortilla meals",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "5b4489fc009fa7000e843af2",
-        "slug": "kfc-ozas",
-        "name": "KFC (Ozas)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/kfc-ozas",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67332fd8ac5de37683d5e0c1"
-      },
-      "stableKey": "kfc-ozas|6a33d5bbd4b4b0fa7fa2b5ca",
-      "key": "venue.promotions_for_telemetry:6a33d5bbd4b4b0fa7fa2b5ca",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a33d5bbd4b4b0fa7fa2b5ca",
-      "text": "-30% Burger & Tortilla meals",
-      "amount": 30,
-      "amountType": "percent",
-      "amountLabel": "30%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 530,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a33d5bbd4b4b0fa7fa2b5ca",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-30% Burger & Tortilla meals",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "616eb3a33c67e1eb00ab3d19",
-        "slug": "kfc-pilaite",
-        "name": "KFC (Pilaitė)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/kfc-pilaite",
-        "imageUrl": "https://imageproxy.wolt.com/assets/673214e5e34d3d02aa5a34ec"
-      },
-      "stableKey": "kfc-pilaite|6a33d5bbd4b4b0fa7fa2b5ca",
-      "key": "venue.promotions_for_telemetry:6a33d5bbd4b4b0fa7fa2b5ca",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a33d5bbd4b4b0fa7fa2b5ca",
-      "text": "-30% Burger & Tortilla meals",
-      "amount": 30,
-      "amountType": "percent",
-      "amountLabel": "30%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 530,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a33d5bbd4b4b0fa7fa2b5ca",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-30% Burger & Tortilla meals",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "684c110176484b5f23e5413b",
-        "slug": "kfc-stotis",
-        "name": "KFC (Stotis)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/kfc-stotis",
-        "imageUrl": "https://imageproxy.wolt.com/assets/684c11478baf0fa6c3998f21"
-      },
-      "stableKey": "kfc-stotis|6a33d5bbd4b4b0fa7fa2b5ca",
-      "key": "venue.promotions_for_telemetry:6a33d5bbd4b4b0fa7fa2b5ca",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a33d5bbd4b4b0fa7fa2b5ca",
-      "text": "-30% Burger & Tortilla meals",
-      "amount": 30,
-      "amountType": "percent",
-      "amountLabel": "30%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 530,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a33d5bbd4b4b0fa7fa2b5ca",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-30% Burger & Tortilla meals",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004b8",
-        "slug": "kika-akropolis-vilnius",
-        "name": "KIKA (Akropolis Vilnius)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-akropolis-vilnius",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-akropolis-vilnius|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004bf",
-        "slug": "kika-domus-pro",
-        "name": "KIKA (Domus Pro)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-domus-pro",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-domus-pro|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004b7",
-        "slug": "kika-jeruzale",
-        "name": "KIKA (Jeruzalė)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-jeruzale",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-jeruzale|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004b5",
-        "slug": "kika-luksio",
-        "name": "KIKA (Lukšio)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-luksio",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-luksio|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004c2",
-        "slug": "kika-mamoniciu-g",
-        "name": "KIKA (Mamoničių g.)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-mamoniciu-g",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-mamoniciu-g|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004bd",
-        "slug": "kika-mindaugo",
-        "name": "KIKA (Mindaugo)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-mindaugo",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-mindaugo|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004b6",
-        "slug": "kika-ozas",
-        "name": "KIKA (Ozas)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-ozas",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-ozas|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004b9",
-        "slug": "kika-panorama",
-        "name": "KIKA (Panorama)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-panorama",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-panorama|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004c0",
-        "slug": "kika-pavilnioniu-g",
-        "name": "KIKA (Pavilnionių g.)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-pavilnioniu-g",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-pavilnioniu-g|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004c1",
-        "slug": "kika-pergales",
-        "name": "KIKA (Pergalės)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-pergales",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-pergales|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004bc",
-        "slug": "kika-pilaites",
-        "name": "KIKA (Pilaitės)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-pilaites",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-pilaites|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004c3",
-        "slug": "kika-vikingu",
-        "name": "KIKA (Vikingų)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-vikingu",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-vikingu|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "68b6df3c8fd2d2676a6004ba",
-        "slug": "kika-zirmunu",
-        "name": "KIKA (Žirmūnų)",
-        "productLine": "pet_supply",
-        "link": "https://wolt.com/en/ltu/vilnius/venue/kika-zirmunu",
-        "imageUrl": "https://imageproxy.wolt.com/mes-image/71d32490-8d56-4bde-9f52-155dd8de2b8d/7131e76f-442e-4688-b895-799a7485660b"
-      },
-      "stableKey": "kika-zirmunu|6a2c0223c9b18357a9beec56",
-      "key": "venue.promotions:6a2c0223c9b18357a9beec56",
-      "sourcePath": "venue.promotions",
-      "campaignId": "6a2c0223c9b18357a9beec56",
-      "text": "-20% off for selected items",
-      "amount": 20,
-      "amountType": "percent",
-      "amountLabel": "20%",
-      "category": "percent",
-      "isDeliveryRelated": false,
-      "isUtilityBadge": false,
-      "score": 520,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2c0223c9b18357a9beec56",
-        "icon": "coupon-fill",
-        "is_offer_stackable": true,
-        "text": "-20% off for selected items",
+        "text": "15% off selected items",
         "variant": "discount"
       }
     },
@@ -890,91 +198,93 @@
     },
     {
       "venue": {
-        "id": "604f84f19ddbb3d48a9234e5",
-        "slug": "pizza-express-svitrigailos-g",
-        "name": "Pizza Express (Švitrigailos g.)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/pizza-express-svitrigailos-g",
-        "imageUrl": "https://imageproxy.wolt.com/assets/67320880f45db57ef6004639"
+        "id": "621650d1be52e7d77ed8ace3",
+        "slug": "wolt-market-naujamiestis",
+        "name": "Wolt Market Naujamiestis",
+        "productLine": "grocery",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/wolt-market-naujamiestis",
+        "imageUrl": "https://imageproxy.wolt.com/mes-image/cb02464c-301a-4c5a-a31d-8019ca026add/37c3301e-d0a7-434d-a08b-62991b69b177"
       },
-      "stableKey": "pizza-express-svitrigailos-g|6a2bb9ab2579f27f0d5e87c1",
-      "key": "venue.promotions:6a2bb9ab2579f27f0d5e87c1",
+      "stableKey": "wolt-market-naujamiestis|6a425304735fe639d051901b",
+      "key": "venue.promotions:6a425304735fe639d051901b",
       "sourcePath": "venue.promotions",
-      "campaignId": "6a2bb9ab2579f27f0d5e87c1",
-      "text": "0€ delivery for new users",
-      "amount": 0,
-      "amountType": "money",
-      "amountLabel": "0 EUR",
-      "category": "new-user-delivery",
-      "isDeliveryRelated": true,
-      "isUtilityBadge": false,
-      "score": -1,
-      "variant": "discount",
-      "raw": {
-        "campaign_id": "6a2bb9ab2579f27f0d5e87c1",
-        "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "0€ delivery for new users",
-        "variant": "discount"
-      }
-    },
-    {
-      "venue": {
-        "id": "69f06c7223c21ec8f8ebe687",
-        "slug": "traskis-justiniskiu-g",
-        "name": "Traškis (Justiniškių g.)",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/traskis-justiniskiu-g",
-        "imageUrl": "https://imageproxy.wolt.com/assets/69f06cacf57703aa9381613d"
-      },
-      "stableKey": "traskis-justiniskiu-g|6a3e8810d90f815a30b91b10",
-      "key": "venue.promotions_for_telemetry:6a3e8810d90f815a30b91b10",
-      "sourcePath": "venue.promotions_for_telemetry",
-      "campaignId": "6a3e8810d90f815a30b91b10",
-      "text": "25% off selected items",
-      "amount": 25,
+      "campaignId": "6a425304735fe639d051901b",
+      "text": "20% off a wide selection",
+      "amount": 20,
       "amountType": "percent",
-      "amountLabel": "25%",
+      "amountLabel": "20%",
       "category": "percent",
       "isDeliveryRelated": false,
       "isUtilityBadge": false,
-      "score": 525,
+      "score": 1520,
       "variant": "discount",
       "raw": {
-        "campaign_id": "6a3e8810d90f815a30b91b10",
+        "campaign_id": "6a425304735fe639d051901b",
         "icon": "coupon-fill",
         "is_offer_stackable": true,
-        "text": "25% off selected items",
+        "text": "20% off a wide selection",
         "variant": "discount"
       }
     },
     {
       "venue": {
-        "id": "61dd6eb490e9dd0df4a05e27",
-        "slug": "vilnijos-ceburekai",
-        "name": "Vilnijos Čeburekai",
-        "productLine": "restaurant",
-        "link": "https://wolt.com/en/ltu/vilnius/restaurant/vilnijos-ceburekai",
-        "imageUrl": "https://imageproxy.wolt.com/assets/673206eb219f1f216bab18ac"
+        "id": "65e86de1dc221741eabdf046",
+        "slug": "wolt-market-zirmunai",
+        "name": "Wolt Market Žirmūnai",
+        "productLine": "grocery",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/wolt-market-zirmunai",
+        "imageUrl": "https://imageproxy.wolt.com/mes-image/cb02464c-301a-4c5a-a31d-8019ca026add/37c3301e-d0a7-434d-a08b-62991b69b177"
       },
-      "stableKey": "vilnijos-ceburekai|6a2bb9ab2579f27f0d5e87c1",
-      "key": "venue.promotions:6a2bb9ab2579f27f0d5e87c1",
+      "stableKey": "wolt-market-zirmunai|6a425304735fe639d051901b",
+      "key": "venue.promotions:6a425304735fe639d051901b",
       "sourcePath": "venue.promotions",
-      "campaignId": "6a2bb9ab2579f27f0d5e87c1",
-      "text": "0€ delivery for new users",
-      "amount": 0,
-      "amountType": "money",
-      "amountLabel": "0 EUR",
-      "category": "new-user-delivery",
-      "isDeliveryRelated": true,
+      "campaignId": "6a425304735fe639d051901b",
+      "text": "20% off a wide selection",
+      "amount": 20,
+      "amountType": "percent",
+      "amountLabel": "20%",
+      "category": "percent",
+      "isDeliveryRelated": false,
       "isUtilityBadge": false,
-      "score": -1,
+      "score": 1520,
       "variant": "discount",
       "raw": {
-        "campaign_id": "6a2bb9ab2579f27f0d5e87c1",
+        "campaign_id": "6a425304735fe639d051901b",
         "icon": "coupon-fill",
-        "is_offer_stackable": false,
-        "text": "0€ delivery for new users",
+        "is_offer_stackable": true,
+        "text": "20% off a wide selection",
+        "variant": "discount"
+      }
+    }
+  ],
+  "disappeared": [
+    {
+      "venue": {
+        "id": "60decf931b264dcf1ea34cce",
+        "slug": "peliukas-flower",
+        "name": "Peliukas Flower Shop",
+        "productLine": "florist",
+        "link": "https://wolt.com/en/ltu/vilnius/venue/peliukas-flower",
+        "imageUrl": "https://imageproxy.wolt.com/mes-image/480a73b5-bda8-4d13-81cd-459f8b1170d4/780e8bec-098d-4372-a829-47ddc64fa74b"
+      },
+      "stableKey": "peliukas-flower|6a3118607fca4ec0b7e9a6ce",
+      "key": "venue.promotions_for_telemetry:6a3118607fca4ec0b7e9a6ce",
+      "sourcePath": "venue.promotions_for_telemetry",
+      "campaignId": "6a3118607fca4ec0b7e9a6ce",
+      "text": "30% off selected items",
+      "amount": 30,
+      "amountType": "percent",
+      "amountLabel": "30%",
+      "category": "percent",
+      "isDeliveryRelated": false,
+      "isUtilityBadge": false,
+      "score": 530,
+      "variant": "discount",
+      "raw": {
+        "campaign_id": "6a3118607fca4ec0b7e9a6ce",
+        "icon": "coupon-fill",
+        "is_offer_stackable": true,
+        "text": "30% off selected items",
         "variant": "discount"
       }
     }
