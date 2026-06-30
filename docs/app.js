@@ -311,10 +311,8 @@ function groupedCityOptions(cities) {
         .sort((a, b) => a.name.localeCompare(b.name, "en"))
         .map((city) => {
           const selected = city.id === state.selectedCity?.id ? " is-selected" : "";
-          const status = city.updatedAt ? "Cached" : "Not cached";
           return `<button class="city-option${selected}" type="button" role="option" data-city-id="${escapeHtml(city.id)}" aria-selected="${city.id === state.selectedCity?.id}">
             <span>${escapeHtml(city.name)}</span>
-            <small>${escapeHtml([city.country, status].filter(Boolean).join(" · "))}</small>
           </button>`;
         })
         .join("");
